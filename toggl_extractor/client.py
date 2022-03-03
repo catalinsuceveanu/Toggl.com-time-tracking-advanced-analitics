@@ -7,6 +7,7 @@ API_URL = "https://api.track.toggl.com/api/v8/"
 API_REPORT = "https://api.track.toggl.com/reports/api/v2/"
 API_AUTH = HTTPBasicAuth("a450eba69fc631d8617db98559e47bef", "api_token")
 yesterday = date.today() - timedelta(1)
+user_agent = "&user_agent=catalin@vipra.tech"
 
 # method for for each api request ( get_time_entries )
 def check_authentification():
@@ -24,6 +25,7 @@ def get_time_entry(entry_id):
         output = []
         request = requests.get(f"{API_URL}time_entries/{entry_id}", auth=API_AUTH)
         if request.status_code == 200:
+
             output.insert(0, id)
             datas = json.loads(request.text)
             for key in datas["data"]:
@@ -55,10 +57,11 @@ def get_time_entries_in_range(start_date):
         return False
 
 
-def get_detailed_report(start_date):
+def get_detailed_report(start_date, page_no):
     request = requests.get(
-        f"{API_REPORT}details?workspace_id=4951342&since={start_date}&until={yesterday}&user_agent=api_test"
+        f"{API_REPORT}details?workspace_id=4951342&since={start_date}&until={yesterday}{user_agent}&page={page_no}",
+        auth=API_AUTH,
     )
-    print(request.status_code)
-    # datas = json.loads(request.text)
-    # return datas
+    # print(request.status_code)
+    datas = json.loads(request.text)
+    return datas
