@@ -1,16 +1,46 @@
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import client
 
 
-def process_entries(time_range):
-    entries = extract_entries_from_request(time_range)
-    for i in entries:
-        print("\n", i, "\n")
-        """the print action is used for me to be able to
-        understand how to process the data"""
+def print_times(time_range):
+    all_entries = structure_entries(time_range)
+    for day in all_entries:
+        print(day + ":")
+        for employee in all_entries[day]:
+            list = all_entries[day][employee]
+            start_of_the_day = convert_time_string_to_float(list[0][0])
+            end_of_the_day = convert_time_string_to_float(list[len(list) - 1][1])
+            gap = calculate_gaps(list)
+            workday = round(
+                end_of_the_day - start_of_the_day - gap,
+                1,
+            )
+            print(employee + ": " + str(workday) + " h")
+        print("\n")
 
 
-def extract_entries_from_request(time_range):
+def structure_entries(time_range):
+    structured_data = {}
+    entries = extract_raw_entries(time_range)
+    for working_entry in entries:
+        start_time = extract_time_from_string(working_entry["start"])
+        end_time = extract_time_from_string(working_entry["end"])
+        date = extract_date_from_string(working_entry["start"])
+        working_time = [start_time, end_time]
+        user = working_entry["user"]
+
+        if date in structured_data:
+            if user in structured_data[date]:
+                structured_data[date][user].insert(0, working_time)
+            else:
+                structured_data[date][user] = [working_time]
+
+        else:
+            structured_data[date] = {user: [working_time]}
+    return structured_data
+
+
+def extract_raw_entries(time_range):
     """takes a dictionary - api request from toggl with time entries and indexes the important data into another list"""
     start_date = calculate_date(time_range)
     entry_no = 1
@@ -19,7 +49,7 @@ def extract_entries_from_request(time_range):
     total_entries = None
     received_entries = []
 
-    while all_entries_done == False:
+    while not all_entries_done:
         datas = client.get_detailed_report(start_date, page_no)
         total_entries = datas["total_count"]
         entry = datas["data"]
@@ -30,7 +60,6 @@ def extract_entries_from_request(time_range):
         page_no += 1
         if entry_no >= total_entries:
             all_entries_done = True
-    print(total_entries)
     return received_entries
 
 
@@ -39,3 +68,28 @@ def calculate_date(time_range):
     and the present day, both in a YYYY-MM-DD format"""
     start_date = date.today() - timedelta(int(time_range))
     return start_date
+
+
+def extract_date_from_string(iso_date_time):
+    return iso_date_time[0:10]
+
+
+def extract_time_from_string(iso_date_time):
+    return iso_date_time[11:16]
+
+
+def convert_time_string_to_float(string_time):
+    return int(string_time[0:2]) + (int(string_time[3:5]) / 60)
+
+
+def calculate_gaps(list):
+    gap = 0.0
+    for i in range(len(list) - 1):
+        gap_start = convert_time_string_to_float(list[i][1])
+        gap_end = convert_time_string_to_float(list[i + 1][0])
+        if gap_end - gap_start >= 1:
+            gap = gap + (gap_end - gap_start)
+    if gap > 1:
+        return gap - 1
+    else:
+        return gap
