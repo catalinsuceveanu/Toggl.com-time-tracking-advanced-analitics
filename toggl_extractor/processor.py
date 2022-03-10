@@ -11,10 +11,16 @@ def print_times(time_range):
             start_of_the_day = convert_time_string_to_float(list[0][0])
             end_of_the_day = convert_time_string_to_float(list[len(list) - 1][1])
             gap = calculate_gaps(list)
-            workday = round(
-                end_of_the_day - start_of_the_day - gap,
-                1,
-            )
+            if start_of_the_day < end_of_the_day:
+                workday = round(
+                    end_of_the_day - start_of_the_day - gap,
+                    1,
+                )
+            else:
+                workday = round(
+                    24 - start_of_the_day - gap + end_of_the_day,
+                    1,
+                )
             print(employee + ": " + str(workday) + " h")
         print("\n")
 
