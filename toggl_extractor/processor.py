@@ -93,9 +93,9 @@ def calculate_gaps(list):
     for i in range(len(list) - 1):
         gap_start = convert_time_string_to_float(list[i][1])
         gap_end = convert_time_string_to_float(list[i + 1][0])
-        if gap_end - gap_start >= 1:
+        if gap_end - gap_start >= 0.5:
             gap = gap + (gap_end - gap_start)
-    if gap > 1:
-        return gap - 1
+    if gap > 0.5:
+        return gap - 0.5
     else:
         return gap
