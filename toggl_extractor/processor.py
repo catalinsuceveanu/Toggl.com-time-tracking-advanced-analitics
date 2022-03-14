@@ -1,6 +1,6 @@
 from datetime import date, timedelta, datetime
 
-import toggl_extractor.client
+from toggl_extractor import client
 
 
 def print_times(time_range):
