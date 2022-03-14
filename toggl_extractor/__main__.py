@@ -19,7 +19,10 @@ def cli():
     help="the number of past days you want to check, starting from yesterday",
 )
 def workdays(range):
-    processor.print_times(range)
+
+    result = processor.get_workdays_for_users_per_day(range)
+
+    # processor.print_times(range)
 
 
 cli.add_command(workdays)
