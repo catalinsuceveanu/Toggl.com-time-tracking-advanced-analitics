@@ -1,6 +1,33 @@
 from datetime import date, timedelta, datetime
 
+<<<<<<< HEAD
 import client
+=======
+from toggl_extractor import client
+
+
+def get_workdays_for_users_per_day(range):
+    start_date = calculate_start_date_from_range(range)
+    YESTERDAY = date.today() - timedelta(1)
+
+    time_entries = client.get_time_entries(start_date, YESTERDAY)
+    structured_entries = structure_raw_entries_by_day_and_user(time_entries)
+    workdays = calculate_workdays_for_users_per_day(structured_entries)
+
+    return workdays
+
+
+def calculate_start_date_from_range(range):
+    """
+    takes the time range (number of days) and returns 2 dates start date (present day-time range = start date)
+    and the present day, both in a YYYY-MM-DD format
+    """
+    return date.today() - timedelta(int(range))
+
+
+def calculate_workdays_for_users_per_day(structured_entries):
+    pass
+>>>>>>> e2b229ab2c5cc96bf30d0a74dfc99197531cfd2d
 
 
 def print_times(time_range):
@@ -26,9 +53,8 @@ def print_times(time_range):
         print("\n")
 
 
-def structure_entries(time_range):
+def structure_raw_entries_by_day_and_user(entries):
     structured_data = {}
-    entries = extract_raw_entries(time_range)
     for working_entry in entries:
         start_time = extract_time_from_string(working_entry["start"])
         end_time = extract_time_from_string(working_entry["end"])
@@ -47,6 +73,7 @@ def structure_entries(time_range):
     return structured_data
 
 
+<<<<<<< HEAD
 def extract_raw_entries(time_range):
     """takes a dictionary - api request from toggl with time entries and indexes the important data into another list"""
     start_date = calculate_date(time_range)
@@ -78,6 +105,8 @@ def calculate_date(time_range):
     return start_date
 
 
+=======
+>>>>>>> e2b229ab2c5cc96bf30d0a74dfc99197531cfd2d
 def extract_date_from_string(iso_date_time):
     return iso_date_time[0:10]
 

@@ -2,6 +2,12 @@ import processor
 import unittest
 
 
+# HOW TO OPEN A FILE
+# test_data = ""
+# with open("data/sample_reports_response.json", "r") as sample_report_file:
+#     test_data = sample_report_file.read()
+
+
 class testProcessor(unittest.TestCase):
     structured_data = {
         "2022-03-03": {
