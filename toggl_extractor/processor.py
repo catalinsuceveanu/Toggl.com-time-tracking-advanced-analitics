@@ -1,8 +1,5 @@
 from datetime import date, timedelta, datetime
 
-<<<<<<< HEAD
-import client
-=======
 from toggl_extractor import client
 
 
@@ -17,25 +14,12 @@ def get_workdays_for_users_per_day(range):
     return workdays
 
 
-def calculate_start_date_from_range(range):
-    """
-    takes the time range (number of days) and returns 2 dates start date (present day-time range = start date)
-    and the present day, both in a YYYY-MM-DD format
-    """
-    return date.today() - timedelta(int(range))
-
-
 def calculate_workdays_for_users_per_day(structured_entries):
-    pass
->>>>>>> e2b229ab2c5cc96bf30d0a74dfc99197531cfd2d
-
-
-def print_times(time_range):
-    all_entries = structure_entries(time_range)
-    for day in all_entries:
-        print(day + ":")
-        for employee in all_entries[day]:
-            list = all_entries[day][employee]
+    calculated_workdays_for_each_employee = {}
+    for day in structured_entries:
+        calculated_workdays_for_each_employee[day] = {}
+        for employee in structured_entries[day]:
+            list = structured_entries[day][employee]
             start_of_the_day = convert_time_string_to_float(list[0][0])
             end_of_the_day = convert_time_string_to_float(list[len(list) - 1][1])
             gap = calculate_gaps(list)
@@ -49,8 +33,8 @@ def print_times(time_range):
                     24 - start_of_the_day - gap + end_of_the_day,
                     1,
                 )
-            print(employee + ": " + str(workday) + " h")
-        print("\n")
+            calculated_workdays_for_each_employee[day][employee] = str(workday) + " h"
+    return calculated_workdays_for_each_employee
 
 
 def structure_raw_entries_by_day_and_user(entries):
@@ -73,40 +57,14 @@ def structure_raw_entries_by_day_and_user(entries):
     return structured_data
 
 
-<<<<<<< HEAD
-def extract_raw_entries(time_range):
-    """takes a dictionary - api request from toggl with time entries and indexes the important data into another list"""
-    start_date = calculate_date(time_range)
-    entry_no = 1
-    page_no = 1
-    all_entries_done = False
-    total_entries = None
-    received_entries = []
-
-    while not all_entries_done:
-        datas = client.get_detailed_report(start_date, page_no)
-        total_entries = datas["total_count"]
-        entry = datas["data"]
-        for i in entry:
-            entry_no += 1
-            received_entries.append(i)
-
-        page_no += 1
-        if entry_no >= total_entries:
-            all_entries_done = True
-    print(received_entries)
-    return received_entries
+def calculate_start_date_from_range(range):
+    """
+    takes the time range (number of days) and returns 2 dates start date (present day-time range = start date)
+    and the present day, both in a YYYY-MM-DD format
+    """
+    return date.today() - timedelta(int(range))
 
 
-def calculate_date(time_range):
-    """takes the time range (number of days) and returns 2 dates start date (present day-time range = start date)
-    and the present day, both in a YYYY-MM-DD format"""
-    start_date = date.today() - timedelta(int(time_range))
-    return start_date
-
-
-=======
->>>>>>> e2b229ab2c5cc96bf30d0a74dfc99197531cfd2d
 def extract_date_from_string(iso_date_time):
     return iso_date_time[0:10]
 

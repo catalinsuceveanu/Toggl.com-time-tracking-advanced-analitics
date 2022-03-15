@@ -1,10 +1,7 @@
 import click
 
-<<<<<<< HEAD
-import processor
-=======
 from toggl_extractor import processor
->>>>>>> e2b229ab2c5cc96bf30d0a74dfc99197531cfd2d
+from toggl_extractor import client
 
 help = "workdays = this command gives the toal worked hours of the employees inluding breaks smaller than 30 mins.Considering that in a 10 minutes break one is still in a work mindset and still solving problems, even if actually smoking / snacking / eating \f test = prints this is a test\f"
 
@@ -25,8 +22,11 @@ def cli():
 def workdays(range):
 
     result = processor.get_workdays_for_users_per_day(range)
-
-    # processor.print_times(range)
+    for day in result:
+        print(day + ":" + "\n")
+        for person in result[day]:
+            print(person + ": " + result[day][person])
+        print("\n\n")
 
 
 cli.add_command(workdays)
