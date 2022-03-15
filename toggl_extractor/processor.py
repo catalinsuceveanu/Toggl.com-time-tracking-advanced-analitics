@@ -1,6 +1,6 @@
 from datetime import date, timedelta, datetime
 
-import toggl_extractor.client
+import client
 
 
 def print_times(time_range):
@@ -67,6 +67,7 @@ def extract_raw_entries(time_range):
         page_no += 1
         if entry_no >= total_entries:
             all_entries_done = True
+    print(received_entries)
     return received_entries
 
 
