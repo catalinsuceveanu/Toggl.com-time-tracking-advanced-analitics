@@ -1,5 +1,6 @@
-import processor
+from toggl_extractor import processor
 import unittest
+import json
 
 
 # HOW TO OPEN A FILE
@@ -7,124 +8,22 @@ import unittest
 # with open("data/sample_reports_response.json", "r") as sample_report_file:
 #     test_data = sample_report_file.read()
 
+with open(
+    "data/calculate_workdays_for_users_per_day_input.json"
+) as calculate_workdays_for_users_per_day_input:
+    calculate_workdays_for_users_per_day_input_var = eval(
+        calculate_workdays_for_users_per_day_input.read()
+    )
+
+with open(
+    "data/calculate_workdays_for_users_per_day_output.json"
+) as calculate_workdays_for_users_per_day_output:
+    calculate_workdays_for_users_per_day_output_var = eval(
+        calculate_workdays_for_users_per_day_output.read()
+    )
+
 
 class testProcessor(unittest.TestCase):
-    structured_data = {
-        "2022-03-03": {
-            "Davide": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Catalin": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Vivek": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Jitesh": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Laurie": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Fatema": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Emmanuel": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Shoishob": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Adrian": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-        },
-        "2022-03-02": {
-            "Davide": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Catalin": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Vivek": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Jitesh": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Laurie": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Fatema": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Emmanuel": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Shoishob": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-            "Adrian": [
-                ["08:00", "09:30"],
-                ["9:45", "11:30"],
-                ["12:30", "14:30"],
-                ["14:45", "16:00"],
-            ],
-        },
-    }
-    """It is an output I want to use, but IDK how"""
-
     def test_convert_time_string_to_float(self):
         test_1 = "00:00"
         test_2 = "02:30"
@@ -163,6 +62,14 @@ class testProcessor(unittest.TestCase):
         self.assertEqual(processor.calculate_gaps(list_3), 0)
         self.assertEqual(processor.calculate_gaps(list_4), 0)
         self.assertEqual(processor.calculate_gaps(list_5), 7.299999999999999)
+
+    def test_calculate_workdays_for_users_per_day(self):
+        self.assertEqual(
+            processor.calculate_workdays_for_users_per_day(
+                calculate_workdays_for_users_per_day_input_var
+            ),
+            calculate_workdays_for_users_per_day_output_var,
+        )
 
 
 if __name__ == "__main__":
