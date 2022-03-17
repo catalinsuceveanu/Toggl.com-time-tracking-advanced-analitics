@@ -54,6 +54,7 @@ def structure_raw_entries_by_day_and_user(entries):
 
         else:
             structured_data[date] = {user: [working_time]}
+
     return structured_data
 
 
