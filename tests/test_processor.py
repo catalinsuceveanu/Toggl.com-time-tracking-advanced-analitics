@@ -21,9 +21,24 @@ with open(
     calculate_workdays_for_users_per_day_output_var = eval(
         calculate_workdays_for_users_per_day_output.read()
     )
+with open(
+    "data/structure_raw_entires_by_day_and_user_input.json"
+) as structure_raw_entires_by_day_and_user_input:
+    structure_raw_entires_by_day_and_user_input_var = eval(
+        structure_raw_entires_by_day_and_user_input.read()
+    )
+
+with open(
+    "data/structure_raw_entires_by_day_and_user_output.json"
+) as structure_raw_entires_by_day_and_user_output:
+    structure_raw_entires_by_day_and_user_output_var = eval(
+        structure_raw_entires_by_day_and_user_output.read()
+    )
 
 
 class testProcessor(unittest.TestCase):
+    maxDiff = None
+
     def test_convert_time_string_to_float(self):
         test_1 = "00:00"
         test_2 = "02:30"
@@ -69,6 +84,14 @@ class testProcessor(unittest.TestCase):
                 calculate_workdays_for_users_per_day_input_var
             ),
             calculate_workdays_for_users_per_day_output_var,
+        )
+
+    def test_structure_raw_entries_by_day_and_user(self):
+        self.assertEqual(
+            processor.structure_raw_entries_by_day_and_user(
+                structure_raw_entires_by_day_and_user_input_var
+            ),
+            structure_raw_entires_by_day_and_user_output_var,
         )
 
 
