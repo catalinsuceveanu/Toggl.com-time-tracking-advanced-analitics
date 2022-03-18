@@ -3,8 +3,6 @@ import click
 from toggl_extractor import processor
 from toggl_extractor import client
 
-help = "workdays = this command gives the toal worked hours of the employees inluding breaks smaller than 30 mins.Considering that in a 10 minutes break one is still in a work mindset and still solving problems, even if actually smoking / snacking / eating \f test = prints this is a test\f"
-
 
 @click.group()
 def cli():
