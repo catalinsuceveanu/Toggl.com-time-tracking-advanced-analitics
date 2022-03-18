@@ -38,35 +38,3 @@ def generate_api_report_url(start_date, end_date, page_no):
         auth=API_AUTH,
     )
     return response
-
-
-# def test_detailed_report(start_date, end_date, current_page):
-#     response = requests.get(
-#         f"{API_REPORT_URL}/details?workspace_id={WORKSPACE_ID}&since={start_date}&until={end_date}&{USER_AGENT}&page={current_page}",
-#         auth=API_AUTH,
-#     )
-#     report = json.loads(response.text)
-#     print(report)
-
-
-# def check_authentification():
-#     """
-#     This checks if the authentication passes on Toggl
-#     Returns `true` if connection is succesfful, `false` otherwise
-#     """
-#     request = requests.get(f"{API_URL}/me", auth=API_AUTH)
-#     return request.status_code == 200
-
-
-# def get_time_entries_in_range(start_date):
-#     """
-#         outputs a list of entries according to the start and end date from the args,
-#         for a specific authentification
-#     """
-
-#     request = requests.get(
-#         f"{API_URL}/time_entries?start_date={start_date}T00%3A00%3A00%2B00%3A00&end_date={YESTERDAY}T23%3A59%3A00%2B00%3A00",
-#         auth=API_AUTH,
-#     )
-#     all_data = json.loads(request.text)
-#     return all_data
