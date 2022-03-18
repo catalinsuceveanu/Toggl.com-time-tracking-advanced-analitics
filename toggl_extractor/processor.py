@@ -84,17 +84,23 @@ def convert_time_string_to_float(iso_date_time):
     return hours + minutes
 
 
-def calculate_gaps_in_the_workday_bigger_than_30mins(list):
-    """takes a list of entries an employee submitted in a day and returns the sum
-    of the breaks which are higher than 30 mins. If there are no such breaks, then
-    it returns 0"""
-    gap = 0.0
-    for i in range(len(list) - 1):
-        gap_start = convert_time_string_to_float(list[i][1])
-        gap_end = convert_time_string_to_float(list[i + 1][0])
-        if gap_end - gap_start > 0.5:
-            gap = gap + (gap_end - gap_start)
-    if gap > 0.5:
-        return gap - 0.5
+def calculate_gaps_in_the_workday_bigger_than_30mins(entries_list_per_pers_day):
+    """takes a entries_list_per_pers_day of entries an employee submitted in a day and returns
+    the sum of the breaks which are higher than 30 mins. If there are no such breaks,
+    then it returns 0"""
+    final_calculated_gap = 0.0
+    for i in range(len(entries_list_per_pers_day) - 1):
+        between_entries_gap_start = convert_time_string_to_float(
+            entries_list_per_pers_day[i][1]
+        )
+        between_entries_gap_end = convert_time_string_to_float(
+            entries_list_per_pers_day[i + 1][0]
+        )
+        if between_entries_gap_end - between_entries_gap_start > 0.5:
+            final_calculated_gap = final_calculated_gap + (
+                between_entries_gap_end - between_entries_gap_start
+            )
+    if final_calculated_gap > 0.5:
+        return final_calculated_gap - 0.5
     else:
-        return gap
+        return final_calculated_gap
