@@ -3,11 +3,6 @@ import unittest
 import json
 
 
-# HOW TO OPEN A FILE
-# test_data = ""
-# with open("data/sample_reports_response.json", "r") as sample_report_file:
-#     test_data = sample_report_file.read()
-
 with open(
     "data/calculate_workdays_for_users_per_day_input.json"
 ) as calculate_workdays_for_users_per_day_input:
