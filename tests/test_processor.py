@@ -37,8 +37,6 @@ with open(
 
 
 class testProcessor(unittest.TestCase):
-    maxDiff = None
-
     def test_convert_time_string_to_float(self):
         test_1 = "00:00"
         test_2 = "02:30"
