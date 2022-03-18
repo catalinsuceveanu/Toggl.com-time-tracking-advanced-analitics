@@ -3,34 +3,6 @@ import unittest
 import json
 
 
-with open(
-    "data/calculate_workdays_for_users_per_day_input.json"
-) as calculate_workdays_for_users_per_day_input:
-    calculate_workdays_for_users_per_day_input_var = eval(
-        calculate_workdays_for_users_per_day_input.read()
-    )
-
-with open(
-    "data/calculate_workdays_for_users_per_day_output.json"
-) as calculate_workdays_for_users_per_day_output:
-    calculate_workdays_for_users_per_day_output_var = eval(
-        calculate_workdays_for_users_per_day_output.read()
-    )
-with open(
-    "data/structure_raw_entires_by_day_and_user_input.json"
-) as structure_raw_entires_by_day_and_user_input:
-    structure_raw_entires_by_day_and_user_input_var = eval(
-        structure_raw_entires_by_day_and_user_input.read()
-    )
-
-with open(
-    "data/structure_raw_entires_by_day_and_user_output.json"
-) as structure_raw_entires_by_day_and_user_output:
-    structure_raw_entires_by_day_and_user_output_var = eval(
-        structure_raw_entires_by_day_and_user_output.read()
-    )
-
-
 class testProcessor(unittest.TestCase):
     def test_convert_time_string_to_float(self):
         test_1 = "00:00"
@@ -83,19 +55,34 @@ class testProcessor(unittest.TestCase):
         )
 
     def test_calculate_workdays_for_users_per_day(self):
+
+        with open("data/calculate_workdays_for_users_per_day_input.json") as input_file:
+            input = eval(input_file.read())
+
+        with open(
+            "data/calculate_workdays_for_users_per_day_output.json"
+        ) as output_file:
+            output = eval(output_file.read())
+
         self.assertEqual(
-            processor.calculate_workdays_for_users_per_day(
-                calculate_workdays_for_users_per_day_input_var
-            ),
-            calculate_workdays_for_users_per_day_output_var,
+            processor.calculate_workdays_for_users_per_day(input),
+            output,
         )
 
     def test_structure_raw_entries_by_day_and_user(self):
+        with open(
+            "data/structure_raw_entires_by_day_and_user_input.json"
+        ) as input_file:
+            input = eval(input_file.read())
+
+        with open(
+            "data/structure_raw_entires_by_day_and_user_output.json"
+        ) as output_file:
+            output = eval(output_file.read())
+
         self.assertEqual(
-            processor.structure_raw_entries_by_day_and_user(
-                structure_raw_entires_by_day_and_user_input_var
-            ),
-            structure_raw_entires_by_day_and_user_output_var,
+            processor.structure_raw_entries_by_day_and_user(input),
+            output,
         )
 
 
