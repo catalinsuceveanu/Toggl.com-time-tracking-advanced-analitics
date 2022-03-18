@@ -46,7 +46,7 @@ class testProcessor(unittest.TestCase):
         self.assertEqual(processor.convert_time_string_to_float(test_2), 2.5)
         self.assertEqual(processor.convert_time_string_to_float(test_3), 23.05)
 
-    def test_calculate_gaps(self):
+    def test_calculate_gaps_in_the_workday_bigger_than_30mins(self):
         list_1 = [
             ["09:30", "10:15"],
             ["10:38", "11:30"],
@@ -70,11 +70,22 @@ class testProcessor(unittest.TestCase):
             ["15:25", "16:00"],
             ["18:00", "17:17"],
         ]
-        self.assertEqual(processor.calculate_gaps(list_1), 1.25)
-        self.assertEqual(processor.calculate_gaps(list_2), 0)
-        self.assertEqual(processor.calculate_gaps(list_3), 0)
-        self.assertEqual(processor.calculate_gaps(list_4), 0)
-        self.assertEqual(processor.calculate_gaps(list_5), 7.299999999999999)
+        self.assertEqual(
+            processor.calculate_gaps_in_the_workday_bigger_than_30mins(list_1), 1.25
+        )
+        self.assertEqual(
+            processor.calculate_gaps_in_the_workday_bigger_than_30mins(list_2), 0
+        )
+        self.assertEqual(
+            processor.calculate_gaps_in_the_workday_bigger_than_30mins(list_3), 0
+        )
+        self.assertEqual(
+            processor.calculate_gaps_in_the_workday_bigger_than_30mins(list_4), 0
+        )
+        self.assertEqual(
+            processor.calculate_gaps_in_the_workday_bigger_than_30mins(list_5),
+            7.299999999999999,
+        )
 
     def test_calculate_workdays_for_users_per_day(self):
         self.assertEqual(
