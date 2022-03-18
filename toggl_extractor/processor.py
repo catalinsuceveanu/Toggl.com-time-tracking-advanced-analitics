@@ -74,8 +74,13 @@ def extract_time_from_string(iso_date_time):
     return iso_date_time[11:16]
 
 
-def convert_time_string_to_float(string_time):
-    return int(string_time[0:2]) + (int(string_time[3:5]) / 60)
+def convert_time_string_to_float(iso_date_time):
+    """divide minutes by 60 to convert them into hours, finally getting a float like
+    5.6 hours return hours + minutes / 60"""
+    hours = int(iso_date_time[0:2])
+    minutes = +(int(iso_date_time[3:5]) / 60)
+
+    return hours + minutes
 
 
 def calculate_gaps(list):
