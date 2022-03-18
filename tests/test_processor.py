@@ -1,6 +1,5 @@
 from toggl_extractor import processor
 import unittest
-import json
 
 
 class testProcessor(unittest.TestCase):

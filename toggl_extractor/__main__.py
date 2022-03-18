@@ -12,7 +12,7 @@ def cli():
 @click.command()
 @click.option(
     "--range",
-    "-r",
+    "--r",
     default=2,
     prompt="no. of days",
     help="the number of past days you want to check, starting from yesterday",
