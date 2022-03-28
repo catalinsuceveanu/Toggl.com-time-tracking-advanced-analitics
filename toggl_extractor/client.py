@@ -1,15 +1,6 @@
-from tokenize import String
 import requests
 import json
-from datetime import date, timedelta
-from requests.auth import HTTPBasicAuth
-
-API_URL = "https://api.track.toggl.com/api/v8"
-
-API_AUTH = HTTPBasicAuth("a450eba69fc631d8617db98559e47bef", "api_token")
-
-USER_AGENT = "user_agent=catalin@vipra.tech"
-WORKSPACE_ID = "4951342"
+from toggl_extractor import settings
 
 
 def get_time_entries(start_date, end_date):
@@ -34,7 +25,7 @@ def get_time_entries(start_date, end_date):
 def generate_api_report_url(start_date, end_date, page_no):
     API_REPORT_URL = "https://api.track.toggl.com/reports/api/v2"
     response = requests.get(
-        f"{API_REPORT_URL}/details?workspace_id={WORKSPACE_ID}&since={start_date}&until={end_date}&{USER_AGENT}&page={page_no}",
-        auth=API_AUTH,
+        f"{API_REPORT_URL}/details?workspace_id={settings.TOGGL_WORKSPACE_ID}&since={start_date}&until={end_date}&{settings.USER_AGENT_TOGGL}&page={page_no}",
+        auth=settings.API_AUTH_TOGGL,
     )
     return response
