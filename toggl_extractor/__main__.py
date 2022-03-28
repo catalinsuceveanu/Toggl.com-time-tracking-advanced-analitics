@@ -1,7 +1,5 @@
 import click
-
 from toggl_extractor import processor
-from toggl_extractor import client
 
 
 @click.group()
