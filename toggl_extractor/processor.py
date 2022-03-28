@@ -1,6 +1,6 @@
 from datetime import date, timedelta, datetime
 from telnetlib import theNULL
-
+from toggl_extractor import slack_client
 from toggl_extractor import client
 
 
@@ -104,3 +104,7 @@ def calculate_gaps_in_the_workday_bigger_than_30mins(entries_list_per_pers_day):
         return final_calculated_gap - 0.5
     else:
         return final_calculated_gap
+
+
+def print_output_to_slack(message):
+    return slack_client.post_to_slack(message)
