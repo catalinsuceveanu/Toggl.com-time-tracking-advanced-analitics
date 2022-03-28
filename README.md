@@ -13,6 +13,15 @@ workdays         : represents the feature
 "1" / int        : the no. of days for the report (starting the day before)
 
 
+
+if the message should be posted on Slack, then:
+
+poetry run python -m toggl_extractor workdays --range 1 --slack True
+or
+poetry run python -m toggl_extractor workdays --r 1 --slack True
+
+
+
 exemple output (cmd given on 2022-03-18):
 
 2022-03-17:
