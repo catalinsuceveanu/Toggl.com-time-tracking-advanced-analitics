@@ -5,7 +5,7 @@ from toggl_extractor import settings
 def post_to_slack(message):
 
     payload = {
-        "channel": settings.SLACK_GENERAL_CHANNEL,
+        "channel": settings.SLACK_VDU_TESTING,
         "username": settings.SLACK_USERNAME,
         "text": message,
     }
