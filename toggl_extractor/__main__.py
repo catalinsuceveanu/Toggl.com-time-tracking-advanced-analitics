@@ -1,5 +1,7 @@
+from email.policy import default
 import click
 from toggl_extractor import processor
+from toggl_extractor import slack_client
 
 
 @click.group()
@@ -15,24 +17,15 @@ def cli():
     prompt="no. of days",
     help="the number of past days you want to check, starting from yesterday",
 )
-@click.option("--slack")
+@click.option("--slack", default=False)
 def workdays(range, slack):
-
     result = processor.get_workdays_for_users_per_day(range)
     if slack:
-        message = str()
-        for day in result:
-            message = message + str(day + ":" + "\n")
-            for person in result[day]:
-                message = message + str(person + ": " + result[day][person] + "\n")
-            message = message + str("\n\n")
-        processor.print_output_to_slack(message)
+        message = processor.convert_workdays_for_user_per_day_to_string(result)
+        slack_client.post_to_slack(message)
     else:
-        for day in result:
-            print(day + ":" + "\n")
-            for person in result[day]:
-                print(person + ": " + result[day][person])
-            print("\n\n")
+        cmd_output = processor.convert_workdays_for_user_per_day_to_string(result)
+        print(cmd_output)
 
 
 cli.add_command(workdays)

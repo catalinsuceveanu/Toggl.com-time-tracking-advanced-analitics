@@ -106,5 +106,18 @@ def calculate_gaps_in_the_workday_bigger_than_30mins(entries_list_per_pers_day):
         return final_calculated_gap
 
 
-def print_output_to_slack(message):
-    return slack_client.post_to_slack(message)
+def convert_workdays_for_user_per_day_to_string(result):
+    converted_workdays_for_user_per_day_to_string = str()
+    for day in result:
+        converted_workdays_for_user_per_day_to_string = (
+            converted_workdays_for_user_per_day_to_string + str(day + ":" + "\n")
+        )
+        for person in result[day]:
+            converted_workdays_for_user_per_day_to_string = (
+                converted_workdays_for_user_per_day_to_string
+                + str(person + ": " + result[day][person] + "\n")
+            )
+        converted_workdays_for_user_per_day_to_string = (
+            converted_workdays_for_user_per_day_to_string + str("\n\n")
+        )
+    return converted_workdays_for_user_per_day_to_string
