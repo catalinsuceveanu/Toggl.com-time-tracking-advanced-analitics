@@ -1,6 +1,5 @@
 import click
 from toggl_extractor import processor
-from toggl_extractor import slack_client
 
 
 @click.group()
@@ -18,13 +17,11 @@ def cli():
 )
 @click.option("--slack", default=False)
 def workdays(range, slack):
-    result = processor.get_workdays_for_users_per_day(range)
+    result = processor.get_workdays_for_users_per_day(range, slack)
     if slack:
-        message = processor.convert_workdays_for_user_per_day_to_string(result)
-        slack_client.post_to_slack(message)
+        print("The output for the required days was posted on slack")
     else:
-        cmd_output = processor.convert_workdays_for_user_per_day_to_string(result)
-        print(cmd_output)
+        print(result)
 
 
 cli.add_command(workdays)
