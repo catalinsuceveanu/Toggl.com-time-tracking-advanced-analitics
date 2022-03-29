@@ -1,4 +1,3 @@
-from email.policy import default
 import click
 from toggl_extractor import processor
 from toggl_extractor import slack_client
