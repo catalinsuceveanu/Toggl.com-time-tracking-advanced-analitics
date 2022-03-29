@@ -84,16 +84,16 @@ class testProcessor(unittest.TestCase):
             output,
         )
 
-    def tast_convert_workdays_for_user_per_day_to_string(self):
+    def test_convert_workdays_for_user_per_day_to_string(self):
         with open(
             "/home/catalin/Documents/vipra-data-unity/tests/data/convert_workdays_for_user_per_day_to_string_input.json"
         ) as input_file:
-            input = eval(input_file)
+            input = eval(input_file.read())
 
         with open(
             "/home/catalin/Documents/vipra-data-unity/tests/data/convert_workdays_for_user_per_day_to_string_output.json"
         ) as output_file:
-            output = eval(output_file)
+            output = eval(output_file.read())
 
         self.assertEqual(
             processor.convert_workdays_for_user_per_day_to_string(input),
