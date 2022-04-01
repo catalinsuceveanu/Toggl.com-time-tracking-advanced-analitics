@@ -1,4 +1,6 @@
 from datetime import date, timedelta
+from distutils.log import error
+from warnings import catch_warnings
 from toggl_extractor import slack_client
 from toggl_extractor import toggl_client
 
@@ -13,7 +15,10 @@ def get_workdays_for_users_per_day(range, slack=False):
     message = convert_workdays_for_user_per_day_to_string(workdays)
 
     if slack:
-        slack_client.post_to_slack(message)
+        try:
+            slack_client.post_to_slack(message)
+        except:
+            return slack_client.post_to_slack(message)
     else:
         return message
 
