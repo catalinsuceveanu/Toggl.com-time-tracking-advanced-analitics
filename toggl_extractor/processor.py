@@ -1,13 +1,13 @@
 from datetime import date, timedelta
 from toggl_extractor import slack_client
-from toggl_extractor import client
+from toggl_extractor import toggl_client
 
 
 def get_workdays_for_users_per_day(range, slack=False):
     start_date = calculate_start_date_from_range(range)
     YESTERDAY = date.today() - timedelta(1)
 
-    time_entries = client.get_time_entries(start_date, YESTERDAY)
+    time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
     structured_entries = structure_raw_entries_by_day_and_user(time_entries)
     workdays = calculate_workdays_for_users_per_day(structured_entries)
     message = convert_workdays_for_user_per_day_to_string(workdays)

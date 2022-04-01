@@ -23,9 +23,9 @@ def get_time_entries(start_date, end_date):
 
 
 def generate_api_report_url(start_date, end_date, page_no):
-    API_REPORT_URL = "https://api.track.toggl.com/reports/api/v2"
+    TOGGL_DETAILED_API_REPORT_URL = "https://api.track.toggl.com/reports/api/v2"
     response = requests.get(
-        f"{API_REPORT_URL}/details?workspace_id={settings.TOGGL_WORKSPACE_ID}&since={start_date}&until={end_date}&{settings.USER_AGENT_TOGGL}&page={page_no}",
-        auth=settings.API_AUTH_TOGGL,
+        f"{TOGGL_DETAILED_API_REPORT_URL}/details?workspace_id={settings.TOGGL_WORKSPACE_ID}&since={start_date}&until={end_date}&{settings.TOGGL_USER_AGENT}&page={page_no}",
+        auth=settings.TOGGL_API_AUTH,
     )
     return response
