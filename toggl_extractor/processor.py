@@ -1,18 +1,26 @@
-from datetime import date, timedelta, datetime
-from telnetlib import theNULL
+from datetime import date, timedelta
+from distutils.log import error
+from warnings import catch_warnings
+from toggl_extractor import slack_client
+from toggl_extractor import toggl_client
 
-from toggl_extractor import client
 
-
-def get_workdays_for_users_per_day(range):
+def get_workdays_for_users_per_day(range, slack=False):
     start_date = calculate_start_date_from_range(range)
     YESTERDAY = date.today() - timedelta(1)
 
-    time_entries = client.get_time_entries(start_date, YESTERDAY)
+    time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
     structured_entries = structure_raw_entries_by_day_and_user(time_entries)
     workdays = calculate_workdays_for_users_per_day(structured_entries)
+    message = convert_workdays_for_user_per_day_to_string(workdays)
 
-    return workdays
+    if slack:
+        try:
+            slack_client.post_to_slack(message)
+        except:
+            return slack_client.post_to_slack(message)
+    else:
+        return message
 
 
 def calculate_workdays_for_users_per_day(structured_entries):
@@ -104,3 +112,20 @@ def calculate_gaps_in_the_workday_bigger_than_30mins(entries_list_per_pers_day):
         return final_calculated_gap - 0.5
     else:
         return final_calculated_gap
+
+
+def convert_workdays_for_user_per_day_to_string(result):
+    converted_workdays_for_user_per_day_to_string = str()
+    for day in result:
+        converted_workdays_for_user_per_day_to_string = (
+            converted_workdays_for_user_per_day_to_string + str(day + ":" + "\n")
+        )
+        for person in result[day]:
+            converted_workdays_for_user_per_day_to_string = (
+                converted_workdays_for_user_per_day_to_string
+                + str(person + ": " + result[day][person] + "\n")
+            )
+        converted_workdays_for_user_per_day_to_string = (
+            converted_workdays_for_user_per_day_to_string + str("\n\n")
+        )
+    return converted_workdays_for_user_per_day_to_string

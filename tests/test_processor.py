@@ -84,6 +84,22 @@ class testProcessor(unittest.TestCase):
             output,
         )
 
+    def test_convert_workdays_for_user_per_day_to_string(self):
+        with open(
+            "data/convert_workdays_for_user_per_day_to_string_input.json"
+        ) as input_file:
+            input = eval(input_file.read())
+
+        with open(
+            "data/convert_workdays_for_user_per_day_to_string_output.json"
+        ) as output_file:
+            output = eval(output_file.read())
+
+        self.assertEqual(
+            processor.convert_workdays_for_user_per_day_to_string(input),
+            output,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -176,6 +176,10 @@ cython_debug/
 .history
 .ionide
 
+BACKUP-calculate_workdays_for_users_per_day_input_copy.json
+BACKUP-calculate_workdays_for_users_per_day_output copy.json
+
+
 # Support for Project snippet scope
 
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode
