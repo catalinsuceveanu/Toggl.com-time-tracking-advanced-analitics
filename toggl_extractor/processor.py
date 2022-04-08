@@ -1,19 +1,40 @@
 from datetime import date, timedelta
-from distutils.log import error
-from warnings import catch_warnings
 from toggl_extractor import slack_client
 from toggl_extractor import toggl_client
+
+YESTERDAY = date.today() - timedelta(1)
 
 
 def get_workdays_for_users_per_day(range, slack=False):
     start_date = calculate_start_date_from_range(range)
-    YESTERDAY = date.today() - timedelta(1)
 
     time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
     structured_entries = structure_raw_entries_by_day_and_user(time_entries)
     workdays = calculate_workdays_for_users_per_day(structured_entries)
     message = convert_workdays_for_user_per_day_to_string(workdays)
 
+    if slack:
+        try:
+            slack_client.post_to_slack(message)
+        except:
+            return slack_client.post_to_slack(message)
+    else:
+        return message
+
+
+def get_efficiency_percentage_per_user_per_day(range, slack=False):
+    start_date = calculate_start_date_from_range(range)
+
+    time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
+    structured_entries = structure_raw_entries_by_day_and_user(time_entries)
+    effective_times = effective_worktime_calculator(structured_entries)
+    workdays = calculate_workdays_for_users_per_day(structured_entries)
+    calculated_efficiency_percentages = (
+        calculate_efficiency_percentage_per_user_per_day(effective_times, workdays)
+    )
+    message = convert_workdays_for_user_per_day_to_string(
+        calculated_efficiency_percentages
+    )
     if slack:
         try:
             slack_client.post_to_slack(message)
@@ -112,6 +133,63 @@ def calculate_gaps_in_the_workday_bigger_than_30mins(entries_list_per_pers_day):
         return final_calculated_gap - 0.5
     else:
         return final_calculated_gap
+
+
+def calculate_efficiency_percentage_per_user_per_day(effective_times, workdays):
+    efficiency_per_person_per_day = {}
+    for day in effective_times:
+        for person in effective_times[day]:
+            effective_time_string = effective_times[day][person]
+            workday_string = workdays[day][person]
+            expected_time_plus_break = float(effective_time_string[0:4]) * 116
+            efficiency_percentage = expected_time_plus_break / float(
+                workday_string[0:4]
+            )
+            if day in efficiency_per_person_per_day:
+                efficiency_per_person_per_day[day][person] = (
+                    str(round(efficiency_percentage)) + " %"
+                )
+
+            else:
+                efficiency_per_person_per_day[day] = {
+                    person: str(round(efficiency_percentage)) + " %"
+                }
+    return efficiency_per_person_per_day
+
+
+def effective_worktime_calculator(structured_entries):
+    effective_worked_times_per_user_per_day = {}
+    for day in structured_entries:
+        effective_worked_times_per_user_per_day[day] = {}
+        for person in structured_entries[day]:
+            list = structured_entries[day][person]
+            effective_time_worked = float()
+            for entry in list:
+                entry_start = convert_time_string_to_float(entry[0])
+                entry_stop = convert_time_string_to_float(entry[1])
+                if entry_start <= entry_stop:
+                    effective_time_worked = (
+                        effective_time_worked + entry_stop - entry_start
+                    )
+
+                else:
+                    effective_time_worked = (
+                        effective_time_worked + float(24) - entry_start + entry_stop
+                    )
+
+            if effective_time_worked < 10.0:
+                effective_worked_times_per_user_per_day[day][person] = (
+                    "0" + str(round(effective_time_worked, 2)) + " h"
+                )
+
+                """this will add a zero in front of a number to transform 4.1 in 04.1"""
+            else:
+                effective_worked_times_per_user_per_day[day][person] = (
+                    str(round(effective_time_worked, 2)) + " h"
+                )
+
+                """this will NOT add a zero in front of a number beacuse it already has both units and tens eg. 12.4"""
+    return effective_worked_times_per_user_per_day
 
 
 def convert_workdays_for_user_per_day_to_string(result):
