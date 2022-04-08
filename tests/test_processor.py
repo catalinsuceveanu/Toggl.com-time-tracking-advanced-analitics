@@ -55,11 +55,13 @@ class testProcessor(unittest.TestCase):
 
     def test_calculate_workdays_for_users_per_day(self):
 
-        with open("data/calculate_workdays_for_users_per_day_input.json") as input_file:
+        with open(
+            "tests/data/calculate_workdays_for_users_per_day_input.json"
+        ) as input_file:
             input = eval(input_file.read())
 
         with open(
-            "data/calculate_workdays_for_users_per_day_output.json"
+            "tests/data/calculate_workdays_for_users_per_day_output.json"
         ) as output_file:
             output = eval(output_file.read())
 
@@ -70,12 +72,12 @@ class testProcessor(unittest.TestCase):
 
     def test_structure_raw_entries_by_day_and_user(self):
         with open(
-            "data/structure_raw_entires_by_day_and_user_input.json"
+            "tests/data/structure_raw_entires_by_day_and_user_input.json"
         ) as input_file:
             input = eval(input_file.read())
 
         with open(
-            "data/structure_raw_entires_by_day_and_user_output.json"
+            "tests/data/structure_raw_entires_by_day_and_user_output.json"
         ) as output_file:
             output = eval(output_file.read())
 
@@ -86,17 +88,49 @@ class testProcessor(unittest.TestCase):
 
     def test_convert_workdays_for_user_per_day_to_string(self):
         with open(
-            "data/convert_workdays_for_user_per_day_to_string_input.json"
+            "tests/data/convert_workdays_for_user_per_day_to_string_input.json"
         ) as input_file:
             input = eval(input_file.read())
 
         with open(
-            "data/convert_workdays_for_user_per_day_to_string_output.json"
+            "tests/data/convert_workdays_for_user_per_day_to_string_output.json"
         ) as output_file:
             output = eval(output_file.read())
 
         self.assertEqual(
             processor.convert_workdays_for_user_per_day_to_string(input),
+            output,
+        )
+
+    def test_effective_worktime_calculator(self):
+        with open("tests/data/effective_worktime_calculator_input.json") as input_file:
+            input = eval(input_file.read())
+
+        with open(
+            "tests/data/effective_worktime_calculator_output.json"
+        ) as output_file:
+            output = eval(output_file.read())
+
+        self.assertEqual(processor.effective_worktime_calculator(input), output)
+
+    def test_calculate_efficiency_percentage_per_user_per_day(self):
+        with open(
+            "tests/data/calculate_efficiency_percentage_per_user_per_day_input_effective_times.json"
+        ) as effective_times_file:
+            effective_times = eval(effective_times_file.read())
+        with open(
+            "tests/data/calculate_efficiency_percentage_per_user_per_day_input_workdays.json"
+        ) as workdays_input_file:
+            workdays = eval(workdays_input_file.read())
+        with open(
+            "tests/data/calculate_efficiency_percentage_per_user_per_day_output.json"
+        ) as output_file:
+            output = eval(output_file.read())
+
+        self.assertEqual(
+            processor.calculate_efficiency_percentage_per_user_per_day(
+                effective_times, workdays
+            ),
             output,
         )
 
