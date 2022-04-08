@@ -8,8 +8,8 @@ YESTERDAY = date.today() - timedelta(1)
 def get_workdays_for_users_per_day(range, slack=False):
     start_date = calculate_start_date_from_range(range)
 
-    time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
-    structured_entries = structure_raw_entries_by_day_and_user(time_entries)
+    raw_time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
+    structured_entries = structure_raw_entries_by_day_and_user(raw_time_entries)
     workdays = calculate_workdays_for_users_per_day(structured_entries)
     message = convert_dict_of_dicts_to_string(workdays)
 
@@ -25,8 +25,8 @@ def get_workdays_for_users_per_day(range, slack=False):
 def get_efficiency_percentage_per_user_per_day(range, slack=False):
     start_date = calculate_start_date_from_range(range)
 
-    time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
-    structured_entries = structure_raw_entries_by_day_and_user(time_entries)
+    raw_time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
+    structured_entries = structure_raw_entries_by_day_and_user(raw_time_entries)
     effective_times = effective_worktime_calculator(structured_entries)
     workdays = calculate_workdays_for_users_per_day(structured_entries)
     calculated_efficiency_percentages = (
