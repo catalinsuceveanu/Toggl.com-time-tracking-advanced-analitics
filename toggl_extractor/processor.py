@@ -11,7 +11,7 @@ def get_workdays_for_users_per_day(range, slack=False):
     time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
     structured_entries = structure_raw_entries_by_day_and_user(time_entries)
     workdays = calculate_workdays_for_users_per_day(structured_entries)
-    message = convert_workdays_for_user_per_day_to_string(workdays)
+    message = convert_dict_of_dicts_to_string(workdays)
 
     if slack:
         try:
@@ -32,9 +32,7 @@ def get_efficiency_percentage_per_user_per_day(range, slack=False):
     calculated_efficiency_percentages = (
         calculate_efficiency_percentage_per_user_per_day(effective_times, workdays)
     )
-    message = convert_workdays_for_user_per_day_to_string(
-        calculated_efficiency_percentages
-    )
+    message = convert_dict_of_dicts_to_string(calculated_efficiency_percentages)
     if slack:
         try:
             slack_client.post_to_slack(message)
@@ -42,6 +40,13 @@ def get_efficiency_percentage_per_user_per_day(range, slack=False):
             return slack_client.post_to_slack(message)
     else:
         return message
+
+
+# def get_average_efficiency_percentage_per_user_in_range(range, slack=False)
+#     start_date = calculate_start_date_from_range(range)
+
+#     time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
+#     structured_entries = structure_raw_entries_by_day_and_user(time_entries)
 
 
 def calculate_workdays_for_users_per_day(structured_entries):
@@ -192,18 +197,17 @@ def effective_worktime_calculator(structured_entries):
     return effective_worked_times_per_user_per_day
 
 
-def convert_workdays_for_user_per_day_to_string(result):
-    converted_workdays_for_user_per_day_to_string = str()
+def convert_dict_of_dicts_to_string(result):
+    converted_dict_of_dicts_to_string = str()
     for day in result:
-        converted_workdays_for_user_per_day_to_string = (
-            converted_workdays_for_user_per_day_to_string + str(day + ":" + "\n")
+        converted_dict_of_dicts_to_string = converted_dict_of_dicts_to_string + str(
+            day + ":" + "\n"
         )
         for person in result[day]:
-            converted_workdays_for_user_per_day_to_string = (
-                converted_workdays_for_user_per_day_to_string
-                + str(person + ": " + result[day][person] + "\n")
+            converted_dict_of_dicts_to_string = converted_dict_of_dicts_to_string + str(
+                person + ": " + result[day][person] + "\n"
             )
-        converted_workdays_for_user_per_day_to_string = (
-            converted_workdays_for_user_per_day_to_string + str("\n\n")
+        converted_dict_of_dicts_to_string = converted_dict_of_dicts_to_string + str(
+            "\n\n"
         )
-    return converted_workdays_for_user_per_day_to_string
+    return converted_dict_of_dicts_to_string
