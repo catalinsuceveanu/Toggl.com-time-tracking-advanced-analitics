@@ -29,10 +29,10 @@ def get_efficiency_percentage_per_user_per_day(range, slack=False):
     structured_entries = structure_raw_entries_by_day_and_user(raw_time_entries)
     effective_times = effective_worktime_calculator(structured_entries)
     workdays = calculate_workdays_for_users_per_day(structured_entries)
-    calculated_efficiency_percentages = (
+    calculated_efficiency_per_user_per_day = (
         calculate_efficiency_percentage_per_user_per_day(effective_times, workdays)
     )
-    message = convert_dict_of_dicts_to_string(calculated_efficiency_percentages)
+    message = convert_dict_of_dicts_to_string(calculated_efficiency_per_user_per_day)
     if slack:
         try:
             slack_client.post_to_slack(message)
@@ -42,11 +42,80 @@ def get_efficiency_percentage_per_user_per_day(range, slack=False):
         return message
 
 
-# def get_average_efficiency_percentage_per_user_in_range(range, slack=False)
-#     start_date = calculate_start_date_from_range(range)
+def get_average_efficiency_per_user_in_range(range, slack=False):
+    start_date = calculate_start_date_from_range(range)
 
-#     time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
-#     structured_entries = structure_raw_entries_by_day_and_user(time_entries)
+    raw_time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
+    structured_entries = structure_raw_entries_by_day_and_user(raw_time_entries)
+    effective_times = effective_worktime_calculator(structured_entries)
+    workdays = calculate_workdays_for_users_per_day(structured_entries)
+    calculated_efficiency_per_user_per_day = (
+        calculate_efficiency_percentage_per_user_per_day(effective_times, workdays)
+    )
+    average_efficiency_per_user_in_range = (
+        calculate_average_efficiency_per_user_in_range(
+            calculated_efficiency_per_user_per_day
+        )
+    )
+    message = convert_dict_of_dicts_to_string(average_efficiency_per_user_in_range)
+
+    if slack:
+        try:
+            slack_client.post_to_slack(message)
+        except:
+            return slack_client.post_to_slack(message)
+    else:
+        return message
+
+
+def calculate_average_efficiency_per_user_in_range(
+    calculated_efficiency_per_user_per_day,
+):
+    first_date = extract_last_key_in_dict(calculated_efficiency_per_user_per_day)
+    last_date = extract_first_key_in_dict(calculated_efficiency_per_user_per_day)
+    the_one_and_only_key = str(
+        f"The efficiencies of all the users between {first_date} and {last_date} is"
+    )
+    average_efficiency_per_user_in_range = {}
+    average_efficiency_per_user_in_range[the_one_and_only_key] = {}
+    users_and_efficiencies = {}
+
+    for day in calculated_efficiency_per_user_per_day:
+        for user in calculated_efficiency_per_user_per_day[day]:
+            if user in users_and_efficiencies:
+                users_and_efficiencies[user].insert(
+                    0, calculated_efficiency_per_user_per_day[day][user]
+                )
+            else:
+                users_and_efficiencies[user] = [
+                    calculated_efficiency_per_user_per_day[day][user]
+                ]
+    for user in users_and_efficiencies:
+        average_efficiency_per_user_in_range[the_one_and_only_key][
+            user
+        ] = average_of_strings_in_list(users_and_efficiencies[user])
+
+    return average_efficiency_per_user_in_range
+
+
+def average_of_strings_in_list(list_of_string_percentages):
+    running_sum = 0
+    for item in list_of_string_percentages:
+        running_sum = running_sum + convert_string_percentage_to_int(item)
+    average = running_sum / len(list_of_string_percentages)
+    return str(round(average)) + " %"
+
+
+def convert_string_percentage_to_int(string_percetange):
+    return int(string_percetange[0:-2])
+
+
+def extract_last_key_in_dict(dict):
+    return list(dict.keys())[len(dict) - 1]
+
+
+def extract_first_key_in_dict(dict):
+    return list(dict.keys())[0]
 
 
 def calculate_workdays_for_users_per_day(structured_entries):
