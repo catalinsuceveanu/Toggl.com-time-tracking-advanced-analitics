@@ -99,12 +99,23 @@ def calculate_efficiency_of_set_user_per_day(efficiency_per_user_per_day, set_pe
     extracted_efficiency_of_set_user_per_day[the_one_and_only_key] = {}
     for date in efficiency_per_user_per_day:
         for user in efficiency_per_user_per_day[date]:
-            if user == set_person:
+            first_name = extract_first_name(user)
+            if first_name == set_person or user == set_person:
                 extracted_efficiency_of_set_user_per_day[the_one_and_only_key][
                     date
                 ] = efficiency_per_user_per_day[date][user]
 
     return extracted_efficiency_of_set_user_per_day
+
+
+def extract_first_name(full_name):
+    first_name = str()
+    for char in full_name:
+        if char is not " ":
+            first_name = first_name + char
+        else:
+            break
+    return first_name
 
 
 def calculate_average_efficiency_per_user_in_range(
