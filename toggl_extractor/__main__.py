@@ -1,5 +1,6 @@
 import click
 from toggl_extractor import processor
+from toggl_extractor import slack_client
 
 
 @click.group()
@@ -17,9 +18,13 @@ def cli():
 )
 @click.option("--slack", is_flag=True)
 def workdays(range, slack):
-    result = processor.get_workdays_for_users_per_day(range, slack)
+    result = processor.get_workdays_for_users_per_day(range)
     if slack:
-        print("The output for the required days was posted on slack")
+        try:
+            slack_client.post_to_slack(result)
+            print("The output for the required days was posted on slack")
+        except:
+            print(slack_client.post_to_slack(result))
     else:
         print(result)
 
@@ -37,13 +42,18 @@ def workdays(range, slack):
 def efficiency(range, slack, useraverage, user):
     result = str()
     if not useraverage and not user:
-        result = processor.get_efficiency_percentage_per_user_per_day(range, slack)
+        result = processor.get_efficiency_percentage_per_user_per_day(range)
     if useraverage and not user:
-        result = processor.get_average_efficiency_per_user_in_range(range, slack)
+        result = processor.get_average_efficiency_per_user_in_range(range)
     if user and not useraverage:
-        result = processor.get_efficiency_of_set_user_per_day(range, user, slack)
+        result = processor.get_efficiency_of_set_user_per_day(range, user)
+
     if slack:
-        print("The output for the required days was posted on slack")
+        try:
+            slack_client.post_to_slack(result)
+            print("The output for the required days was posted on slack")
+        except:
+            print(slack_client.post_to_slack(result))
     else:
         print(result)
 

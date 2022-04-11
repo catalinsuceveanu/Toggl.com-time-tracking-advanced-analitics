@@ -102,16 +102,15 @@ class testProcessor(unittest.TestCase):
             output,
         )
 
-    def test_effective_worktime_calculator(self):
-        with open("tests/data/effective_worktime_calculator_input.json") as input_file:
+    def test_calculate_effective_times(self):
+
+        with open("tests/data/calculate_effective_times_input.json") as input_file:
             input = eval(input_file.read())
 
-        with open(
-            "tests/data/effective_worktime_calculator_output.json"
-        ) as output_file:
+        with open("tests/data/calculate_effective_times_output.json") as output_file:
             output = eval(output_file.read())
 
-        self.assertEqual(processor.effective_worktime_calculator(input), output)
+        self.assertEqual(processor.calculate_effective_times(input), output)
 
     def test_calculate_efficiency_percentage_per_user_per_day(self):
         with open(
