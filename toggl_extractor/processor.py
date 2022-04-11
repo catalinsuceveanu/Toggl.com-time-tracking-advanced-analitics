@@ -68,13 +68,52 @@ def get_average_efficiency_per_user_in_range(range, slack=False):
         return message
 
 
+def get_efficiency_of_set_user_per_day(range, set_user, slack=False):
+    start_date = calculate_start_date_from_range(range)
+
+    raw_time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
+    structured_entries = structure_raw_entries_by_day_and_user(raw_time_entries)
+    effective_times = effective_worktime_calculator(structured_entries)
+    workdays = calculate_workdays_for_users_per_day(structured_entries)
+    calculated_efficiency_per_user_per_day = (
+        calculate_efficiency_percentage_per_user_per_day(effective_times, workdays)
+    )
+    calculated_efficiency_of_set_user_per_day = (
+        calculate_efficiency_of_set_user_per_day(
+            calculated_efficiency_per_user_per_day, set_user
+        )
+    )
+    message = convert_dict_of_dicts_to_string(calculated_efficiency_of_set_user_per_day)
+    if slack:
+        try:
+            slack_client.post_to_slack(message)
+        except:
+            return slack_client.post_to_slack(message)
+    else:
+        return message
+
+
+def calculate_efficiency_of_set_user_per_day(efficiency_per_user_per_day, set_person):
+    extracted_efficiency_of_set_user_per_day = {}
+    the_one_and_only_key = str(f"The daily efficiencies of {set_person} are")
+    extracted_efficiency_of_set_user_per_day[the_one_and_only_key] = {}
+    for date in efficiency_per_user_per_day:
+        for user in efficiency_per_user_per_day[date]:
+            if user == set_person:
+                extracted_efficiency_of_set_user_per_day[the_one_and_only_key][
+                    date
+                ] = efficiency_per_user_per_day[date][user]
+
+    return extracted_efficiency_of_set_user_per_day
+
+
 def calculate_average_efficiency_per_user_in_range(
     calculated_efficiency_per_user_per_day,
 ):
     first_date = extract_last_key_in_dict(calculated_efficiency_per_user_per_day)
     last_date = extract_first_key_in_dict(calculated_efficiency_per_user_per_day)
     the_one_and_only_key = str(
-        f"The efficiencies of all the users between {first_date} and {last_date} is"
+        f"The efficiencies of all the users between {first_date} and {last_date} are"
     )
     average_efficiency_per_user_in_range = {}
     average_efficiency_per_user_in_range[the_one_and_only_key] = {}
