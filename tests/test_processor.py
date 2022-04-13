@@ -133,6 +133,70 @@ class testProcessor(unittest.TestCase):
             output,
         )
 
+    def test_calculate_efficiency_of_set_user_per_day(self):
+        self.maxDiff = None
+        with open(
+            "tests/data/calculate_efficiency_of_set_user_per_day_input.json"
+        ) as input_file:
+            input = eval(input_file.read())
+
+        with open(
+            "tests/data/calculate_efficiency_of_set_user_per_day_output_1.json"
+        ) as output_file_1:
+            output_1 = eval(output_file_1.read())
+        set_user_1 = "Jitesh"
+        """This case tests the normal functionality"""
+
+        with open(
+            "tests/data/calculate_efficiency_of_set_user_per_day_output_2.json"
+        ) as output_file_2:
+            output_2 = eval(output_file_2.read())
+        set_user_2 = "Davide"
+        """in toggl Davide is registered as "Davide Vitelaru", here we check that it still recognizes him"""
+
+        with open(
+            "tests/data/calculate_efficiency_of_set_user_per_day_output_3.json"
+        ) as output_file_3:
+            output_3 = eval(output_file_3.read())
+        set_user_3 = "skdjfbfijbfrljefv"
+        """there isn't and probably will never be a user with this name, it still shouldn't crash"""
+
+        self.assertEqual(
+            processor.calculate_efficiency_of_set_user_per_day(input, set_user_1),
+            output_1,
+        )
+        self.assertEqual(
+            processor.calculate_efficiency_of_set_user_per_day(input, set_user_2),
+            output_2,
+        )
+        self.assertEqual(
+            processor.calculate_efficiency_of_set_user_per_day(input, set_user_3),
+            output_3,
+        )
+
+    def test_extract_first_name(self):
+        full_name_1 = "Tudor Vladimirescu"
+        full_name_2 = "Andrei Tudose Marian"
+        full_name_3 = "Gigi"
+
+        first_name_1 = "Tudor"
+        first_name_2 = "Andrei"
+        first_name_3 = "Gigi"
+
+        self.assertEqual(processor.extract_first_name(full_name_1), first_name_1)
+        self.assertEqual(processor.extract_first_name(full_name_2), first_name_2)
+        self.assertEqual(processor.extract_first_name(full_name_3), first_name_3)
+
+    def test_calculate_average_efficiency_per_user_in_range(self):
+        with open("") as input_file:
+            input = eval(input_file.read())
+        with open("") as output_file:
+            output = eval(output_file.read())
+
+        self.assertEqual(
+            processor.calculate_average_efficiency_per_user_in_range(input), output
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
