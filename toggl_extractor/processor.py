@@ -58,6 +58,7 @@ def calculate_efficiency_of_set_user_per_day(efficiency_per_user_per_day, set_pe
     extracted_efficiency_of_set_user_per_day = {}
     the_one_and_only_key = str(f"The daily efficiencies of {set_person} are")
     extracted_efficiency_of_set_user_per_day[the_one_and_only_key] = {}
+    set_person_exists = False
     for date in efficiency_per_user_per_day:
         for user in efficiency_per_user_per_day[date]:
             first_name = extract_first_name(user)
@@ -65,7 +66,16 @@ def calculate_efficiency_of_set_user_per_day(efficiency_per_user_per_day, set_pe
                 extracted_efficiency_of_set_user_per_day[the_one_and_only_key][
                     date
                 ] = efficiency_per_user_per_day[date][user]
-
+                set_person_exists = True
+    if not set_person_exists:
+        no_entries_for_set_user = {
+            f"There are no entries for {set_person}, please": (
+                "\n Verify the name is spelled right\n or extend the range to check more days.\n If there are still no entries, please consider the fact that that person didn't register any work in toggl, or there is no person with that name registred "
+            )
+        }
+        extracted_efficiency_of_set_user_per_day[
+            the_one_and_only_key
+        ] = no_entries_for_set_user
     return extracted_efficiency_of_set_user_per_day
 
 
