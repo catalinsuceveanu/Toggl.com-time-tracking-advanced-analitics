@@ -134,7 +134,6 @@ class testProcessor(unittest.TestCase):
         )
 
     def test_calculate_efficiency_of_set_user_per_day(self):
-        self.maxDiff = None
         with open(
             "tests/data/calculate_efficiency_of_set_user_per_day_input.json"
         ) as input_file:
@@ -188,9 +187,14 @@ class testProcessor(unittest.TestCase):
         self.assertEqual(processor.extract_first_name(full_name_3), first_name_3)
 
     def test_calculate_average_efficiency_per_user_in_range(self):
-        with open("") as input_file:
+        self.maxDiff = None
+        with open(
+            "tests/data/calculate_average_efficiency_per_user_in_range_input.json"
+        ) as input_file:
             input = eval(input_file.read())
-        with open("") as output_file:
+        with open(
+            "tests/data/calculate_average_efficiency_per_user_in_range_output.json"
+        ) as output_file:
             output = eval(output_file.read())
 
         self.assertEqual(
