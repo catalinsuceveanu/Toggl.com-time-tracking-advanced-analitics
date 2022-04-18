@@ -219,6 +219,18 @@ class testProcessor(unittest.TestCase):
             processor.calculate_average_of_string_percentages_in_list(case_3), output_3
         )
 
+    def test_convert_string_percentage_to_int(self):
+        case_1 = "100 %"
+        output_1 = 100
+        case_2 = "0 %"
+        output_2 = 0
+        case_3 = " 1234567 %"
+        output_3 = 1234567
+
+        self.assertEqual(processor.convert_string_percentage_to_int(case_1), output_1)
+        self.assertEqual(processor.convert_string_percentage_to_int(case_2), output_2)
+        self.assertEqual(processor.convert_string_percentage_to_int(case_3), output_3)
+
 
 if __name__ == "__main__":
     unittest.main()
