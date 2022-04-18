@@ -231,6 +231,18 @@ class testProcessor(unittest.TestCase):
         self.assertEqual(processor.convert_string_percentage_to_int(case_2), output_2)
         self.assertEqual(processor.convert_string_percentage_to_int(case_3), output_3)
 
+    def test_extract_first_name(self):
+        case_1 = "Andrei Vasilescu"
+        output_1 = "Andrei"
+        case_2 = "Marian"
+        output_2 = "Marian"
+        case_3 = ""
+        output_3 = ""
+
+        self.assertEqual(processor.extract_first_name(case_1), output_1)
+        self.assertEqual(processor.extract_first_name(case_2), output_2)
+        self.assertEqual(processor.extract_first_name(case_3), output_3)
+
 
 if __name__ == "__main__":
     unittest.main()
