@@ -104,7 +104,9 @@ def calculate_average_efficiency_per_user_in_range(
     for user in users_and_efficiencies:
         average_efficiency_per_user_in_range[the_one_and_only_key][
             user
-        ] = calculate_average_of_strings_in_list(users_and_efficiencies[user])
+        ] = calculate_average_of_string_percentages_in_list(
+            users_and_efficiencies[user]
+        )
 
     return average_efficiency_per_user_in_range
 
@@ -273,11 +275,12 @@ def convert_time_string_to_float(iso_date_time):
     return hours + minutes
 
 
-def calculate_average_of_strings_in_list(list_of_string_percentages):
+def calculate_average_of_string_percentages_in_list(list_of_string_percentages):
+    no_of_items_in_list = max(1, len(list_of_string_percentages))
     running_sum = 0
     for item in list_of_string_percentages:
         running_sum = running_sum + convert_string_percentage_to_int(item)
-    average = running_sum / len(list_of_string_percentages)
+    average = running_sum / no_of_items_in_list
     return str(round(average)) + " %"
 
 

@@ -201,6 +201,24 @@ class testProcessor(unittest.TestCase):
             processor.calculate_average_efficiency_per_user_in_range(input), output
         )
 
+    def test_calculate_average_of_string_percentages_in_list(self):
+        case_1 = ["100 %", "50 %", "75 %"]
+        output_1 = "75 %"
+        case_2 = []
+        output_2 = "0 %"
+        case_3 = ["1 %"]
+        output_3 = "1 %"
+
+        self.assertEqual(
+            processor.calculate_average_of_string_percentages_in_list(case_1), output_1
+        )
+        self.assertEqual(
+            processor.calculate_average_of_string_percentages_in_list(case_2), output_2
+        )
+        self.assertEqual(
+            processor.calculate_average_of_string_percentages_in_list(case_3), output_3
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
