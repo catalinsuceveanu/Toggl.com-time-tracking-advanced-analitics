@@ -100,7 +100,7 @@ Jitesh: 91 %
 Shoisob: 103 %
 ```
                 
-**--user**: it returns a daily efficiency report on the user you specify
+**--user {firstname}**: it returns a daily efficiency report on the user you specify
 
 ```python
 poetry run python -m toggl_extractor efficiency --r 10 --user Andrei
