@@ -85,7 +85,8 @@ Options:
                   (it works in combination with all the other commands)
                   poetry run python -m toggl_extractor efficiency --r 1 --slack
                   poetry run python -m toggl_extractor efficiency --r 1 --useraverage --slack
-                  poetry run python -m toggl_extractor efficiency --r 10 --user {firstname}
+                  poetry run python -m toggl_extractor efficiency --r 10 --user {firstname} --slack
+                  poetry run python -m toggl_extractor efficiency --r 10 --user {firstname} --useraverage --slack
 
 --useraverage   : it calculates the average efficiency for each user
                   in the required range.
