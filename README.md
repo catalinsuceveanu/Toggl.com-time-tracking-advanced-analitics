@@ -23,7 +23,7 @@ the number of days, even if there is nothing to dispaly.
 
 
 exemple output (cmd given on 2022-03-18):
-'''python
+```python
 poetry run python -m toggl_extractor workdays --r 1
 
 2022-03-17:
@@ -38,7 +38,7 @@ Laurie: 4.4 h
 Emmanuel: 6.5 h
 Catalin Suceveanu: 3.9 h
 Jitesh: 10.0 h
-'''
+```
 
 **Option:**
 --slack     : the output is sent to slack
@@ -65,7 +65,7 @@ efficiency      : represents the feature
   are entries for those dates. Example Sundays usually don't have entries, but they count 
   in the number of days, even if there is nothing to dispaly.
 
-'''python
+```python
 poetry run python -m toggl_extractor efficiency --r 1 
 
 2022-04-07:
@@ -81,7 +81,7 @@ Emmanuel: 93 %
 Davide Vitelaru: 108 %
 James: 116 %
 Shoisob: 103 %
-'''
+```
 
 **Options:**
 --slack         : the output is sent to slack 
@@ -93,7 +93,7 @@ Shoisob: 103 %
 
 --useraverage   : it calculates the average efficiency for each user
                   in the required range.
-'''python
+```python
 poetry run python -m toggl_extractor efficiency --r 1 --useraverage
 
 The efficiencies of all the users between 2022-04-19 and 2022-04-19 are:
@@ -106,11 +106,11 @@ Davide Vitelaru: 90 %
 Laurie: 110 %
 Jitesh: 91 %
 Shoisob: 103 %
-'''
+```
                 
 --user          : it returns a report daily efficiency report on the user
                  you specify
-'''python
+```python
 poetry run python -m toggl_extractor efficiency --r 10 --user Andrei
 
 The daily efficiencies of Andrei are:
@@ -121,15 +121,15 @@ The daily efficiencies of Andrei are:
 2022-04-13: 103 %
 2022-04-12: 109 %
 2022-04-11: 113 %
-'''
+```
 
 --user and        
 --useraverage      : it returns a report daily efficiency report on the user
                      you specify
 
-'''python
+```python
 poetry run python -m toggl_extractor efficiency --r 10 --user Andrei --useraverage            
 
 The average efficiency of Andrei between:
 2022-04-11 and 2022-04-20 is: 106 %
-'''
+```
