@@ -7,20 +7,15 @@ This is defined as the sum of all the time entries + gaps between entries, which
 
 When breaks higher than 30 minutes are found, they are added. Out of the entire sum 30 minutes are subtracted and the reminder is removed out of the persons entire workday.
 
-### Commands: ###
+### Command: ###
 
 poetry run python -m toggl_extractor workdays --r 1
 
-**workdays** : represents the feature
+- **workdays** : represents the feature
 
-**--r**: is the option for past days for which you want to see the report
+- **--r**: is the option for past days for which you want to see the report
 
-**"1" / int** : the no. of days for the report (starting the day before), so if you 
-give it a 1, it will give you the report for yesterday, if you give it a 2, it will return 
-the report for yesterday and the day before, 3, yesterday, the day before yesterday and 
-the day before the day berfore yesterday. It will return data for those date only if there 
-are entries for those dates. Example Sundays usually don't have entries, but they count in 
-the number of days, even if there is nothing to dispaly.
+- **"1" / int** : the no. of days for the report (starting the day before), so if you give it a 1, it will give you the report for yesterday, if you give it a 2, it will return the report for yesterday and the day before, 3, yesterday, the day before yesterday and the day before the day berfore yesterday. It will return data for those date only if there are entries for those dates. Example Sundays usually don't have entries, but they count in the number of days, even if there is nothing to dispaly.
 
 
 exemple output
@@ -52,21 +47,14 @@ poetry run python -m toggl_extractor workdays --r 1 --slack
 
 ## Feature: Show the efficiency of the person ##
 
-It compares the sum of all the entries with the workday total (see the first feature).
-But, given that to properly be efficient you might need micro-breaks during the day,
-in the formula small breaks of 10 minutes every 50 minutes were accounted for.
+It compares the sum of all the entries with the workday total (see the first feature). But, given that to properly be efficient you might need micro-breaks during the day, in the formula small breaks of 10 minutes every 50 minutes were accounted for.
 
-### Commands: ###
+### Command: ###
 poetry run python -m toggl_extractor efficiency --r 3
 
-**efficiency** : represents the feature
-**--r**: is the range option for past days for which you want to see the report
-**"3" / int** : the no. of days for the report (starting the day before), so if you give
- it a 1, it will give you the report for yesterday, if you give it a 2, it will return the
-  report for yesterday and the day before, 3, yesterday, the day before yesterday and the 
-  day before the day berfore yesterday. It will return data for those date only if there 
-  are entries for those dates. Example Sundays usually don't have entries, but they count 
-  in the number of days, even if there is nothing to dispaly.
+- **efficiency** : represents the feature
+- **--r**: is the range option for past days for which you want to see the report
+- **"3" / int** : the no. of days for the report (starting the day before), so if you give it a 1, it will give you the report for yesterday, if you give it a 2, it will return the report for yesterday and the day before, 3, yesterday, the day before yesterday and the day before the day berfore yesterday. It will return data for those date only if there are entries for those dates. Example Sundays usually don't have entries, but they count in the number of days, even if there is nothing to dispaly.
 
 
 ```python
@@ -112,7 +100,7 @@ Jitesh: 91 %
 Shoisob: 103 %
 ```
                 
-**--user**: it returns a report daily efficiency report on the user you specify
+**--user**: it returns a daily efficiency report on the user you specify
 
 ```python
 poetry run python -m toggl_extractor efficiency --r 10 --user Andrei
