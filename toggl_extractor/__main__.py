@@ -10,7 +10,6 @@ def cli():
 
 @click.command()
 @click.option(
-    "--range",
     "--r",
     default=2,
     prompt="no. of days",
@@ -45,9 +44,10 @@ def efficiency(range, slack, useraverage, user):
         result = processor.get_efficiency_percentage_per_user_per_day(range)
     if useraverage and not user:
         result = processor.get_average_efficiency_per_user_in_range(range)
-    if user and not useraverage:
+    if not useraverage and user:
         result = processor.get_efficiency_of_set_user_per_day(range, user)
-
+    if user and useraverage:
+        result = processor.get_efficiency_of_set_user_in_range(range, user)
     if slack:
         try:
             slack_client.post_to_slack(result)
