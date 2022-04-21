@@ -243,6 +243,24 @@ class testProcessor(unittest.TestCase):
         self.assertEqual(processor.extract_first_name(case_2), output_2)
         self.assertEqual(processor.extract_first_name(case_3), output_3)
 
+    def test_calculate_average_efficiency_of_set_user_in_range(self):
+        set_person = "Matei"
+        with open(
+            "tests/data/calculate_efficiency_of_set_user_in_range_input_1.json"
+        ) as input_file:
+            input = eval(input_file.read())
+        with open(
+            "tests/data/calculate_efficiency_of_set_user_in_range_output_1.json"
+        ) as output_file:
+            output = eval(output_file.read())
+
+        self.assertEqual(
+            processor.calculate_average_efficiency_of_set_user_in_range(
+                input, set_person
+            ),
+            output,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
