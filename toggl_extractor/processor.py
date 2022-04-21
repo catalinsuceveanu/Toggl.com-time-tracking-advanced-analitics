@@ -61,14 +61,18 @@ def get_efficiency_of_set_user_in_range(range, set_user):
     efficiency_of_set_user_per_day = calculate_efficiency_of_set_user_per_day(
         efficiency_per_user_per_day, set_user
     )
-    efficiency_of_set_user_in_range = calculate_efficiency_of_set_user_in_range(
+    efficiency_of_set_user_in_range = calculate_average_efficiency_of_set_user_in_range(
         efficiency_of_set_user_per_day, set_user
     )
+    print(efficiency_of_set_user_per_day)
+    print(efficiency_of_set_user_in_range)
     message = convert_dict_of_dicts_to_string(efficiency_of_set_user_in_range)
     return message
 
 
-def calculate_efficiency_of_set_user_in_range(daily_efficiencies_of_person, set_person):
+def calculate_average_efficiency_of_set_user_in_range(
+    daily_efficiencies_of_person, set_person
+):
     list_of_efficiency_percentages = []
     the_one_and_only_key = f"The average efficiency of {set_person} between"
     start_date = ""
