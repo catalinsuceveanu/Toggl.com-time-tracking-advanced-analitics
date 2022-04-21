@@ -15,10 +15,10 @@ def get_efficiency_percentage_per_user_per_day(range):
     structured_entries = execute_common_sequance(range)
     workdays = calculate_workdays_for_users_per_day(structured_entries)
     effective_times = calculate_effective_times(structured_entries)
-    calculated_efficiency_per_user_per_day = (
-        calculate_efficiency_percentage_per_user_per_day(effective_times, workdays)
+    efficiency_per_user_per_day = calculate_efficiency_percentage_per_user_per_day(
+        effective_times, workdays
     )
-    message = convert_dict_of_dicts_to_string(calculated_efficiency_per_user_per_day)
+    message = convert_dict_of_dicts_to_string(efficiency_per_user_per_day)
     return message
 
 
@@ -26,13 +26,11 @@ def get_average_efficiency_per_user_in_range(range):
     structured_entries = execute_common_sequance(range)
     effective_times = calculate_effective_times(structured_entries)
     workdays = calculate_workdays_for_users_per_day(structured_entries)
-    calculated_efficiency_per_user_per_day = (
-        calculate_efficiency_percentage_per_user_per_day(effective_times, workdays)
+    efficiency_per_user_per_day = calculate_efficiency_percentage_per_user_per_day(
+        effective_times, workdays
     )
     average_efficiency_per_user_in_range = (
-        calculate_average_efficiency_per_user_in_range(
-            calculated_efficiency_per_user_per_day
-        )
+        calculate_average_efficiency_per_user_in_range(efficiency_per_user_per_day)
     )
     message = convert_dict_of_dicts_to_string(average_efficiency_per_user_in_range)
     return message
@@ -42,16 +40,55 @@ def get_efficiency_of_set_user_per_day(range, set_user):
     structured_entries = execute_common_sequance(range)
     effective_times = calculate_effective_times(structured_entries)
     workdays = calculate_workdays_for_users_per_day(structured_entries)
-    calculated_efficiency_per_user_per_day = (
-        calculate_efficiency_percentage_per_user_per_day(effective_times, workdays)
+    efficiency_per_user_per_day = calculate_efficiency_percentage_per_user_per_day(
+        effective_times, workdays
     )
-    calculated_efficiency_of_set_user_per_day = (
-        calculate_efficiency_of_set_user_per_day(
-            calculated_efficiency_per_user_per_day, set_user
-        )
+    efficiency_of_set_user_per_day = calculate_efficiency_of_set_user_per_day(
+        efficiency_per_user_per_day, set_user
     )
-    message = convert_dict_of_dicts_to_string(calculated_efficiency_of_set_user_per_day)
+    print(efficiency_of_set_user_per_day)
+    message = convert_dict_of_dicts_to_string(efficiency_of_set_user_per_day)
     return message
+
+
+def get_efficiency_of_set_user_in_range(range, set_user):
+    structured_entries = execute_common_sequance(range)
+    effective_times = calculate_effective_times(structured_entries)
+    workdays = calculate_workdays_for_users_per_day(structured_entries)
+    efficiency_per_user_per_day = calculate_efficiency_percentage_per_user_per_day(
+        effective_times, workdays
+    )
+    efficiency_of_set_user_per_day = calculate_efficiency_of_set_user_per_day(
+        efficiency_per_user_per_day, set_user
+    )
+    efficiency_of_set_user_in_range = calculate_efficiency_of_set_user_in_range(
+        efficiency_of_set_user_per_day, set_user
+    )
+    message = convert_dict_of_dicts_to_string(efficiency_of_set_user_in_range)
+    return message
+
+
+def calculate_efficiency_of_set_user_in_range(daily_efficiencies_of_person, set_person):
+    list_of_efficiency_percentages = []
+    the_one_and_only_key = f"The average efficiency of {set_person} between"
+    start_date = ""
+    end_date = ""
+    dates = ""
+    result = {the_one_and_only_key: {}}
+    for key in daily_efficiencies_of_person:
+        start_date = extract_last_key_in_dict(daily_efficiencies_of_person[key])
+        end_date = extract_first_key_in_dict(daily_efficiencies_of_person[key])
+        dates = f"{start_date} and {end_date} is"
+        for date in daily_efficiencies_of_person[key]:
+            list_of_efficiency_percentages.append(
+                daily_efficiencies_of_person[key][date]
+            )
+    average_efficiency_of_the_set_person = (
+        calculate_average_of_string_percentages_in_list(list_of_efficiency_percentages)
+    )
+
+    result[the_one_and_only_key] = {dates: average_efficiency_of_the_set_person}
+    return result
 
 
 def calculate_efficiency_of_set_user_per_day(efficiency_per_user_per_day, set_person):
@@ -80,10 +117,10 @@ def calculate_efficiency_of_set_user_per_day(efficiency_per_user_per_day, set_pe
 
 
 def calculate_average_efficiency_per_user_in_range(
-    calculated_efficiency_per_user_per_day,
+    efficiency_per_user_per_day,
 ):
-    first_date = extract_last_key_in_dict(calculated_efficiency_per_user_per_day)
-    last_date = extract_first_key_in_dict(calculated_efficiency_per_user_per_day)
+    first_date = extract_last_key_in_dict(efficiency_per_user_per_day)
+    last_date = extract_first_key_in_dict(efficiency_per_user_per_day)
     the_one_and_only_key = str(
         f"The efficiencies of all the users between {first_date} and {last_date} are"
     )
@@ -91,16 +128,14 @@ def calculate_average_efficiency_per_user_in_range(
     average_efficiency_per_user_in_range[the_one_and_only_key] = {}
     users_and_efficiencies = {}
 
-    for day in calculated_efficiency_per_user_per_day:
-        for user in calculated_efficiency_per_user_per_day[day]:
+    for day in efficiency_per_user_per_day:
+        for user in efficiency_per_user_per_day[day]:
             if user in users_and_efficiencies:
                 users_and_efficiencies[user].insert(
-                    0, calculated_efficiency_per_user_per_day[day][user]
+                    0, efficiency_per_user_per_day[day][user]
                 )
             else:
-                users_and_efficiencies[user] = [
-                    calculated_efficiency_per_user_per_day[day][user]
-                ]
+                users_and_efficiencies[user] = [efficiency_per_user_per_day[day][user]]
     for user in users_and_efficiencies:
         average_efficiency_per_user_in_range[the_one_and_only_key][
             user
@@ -112,9 +147,9 @@ def calculate_average_efficiency_per_user_in_range(
 
 
 def calculate_workdays_for_users_per_day(structured_entries):
-    calculated_workdays_for_each_employee = {}
+    workdays_for_each_employee = {}
     for day in structured_entries:
-        calculated_workdays_for_each_employee[day] = {}
+        workdays_for_each_employee[day] = {}
         for employee in structured_entries[day]:
             list = structured_entries[day][employee]
             start_of_the_day = convert_time_string_to_float(list[0][0])
@@ -130,8 +165,8 @@ def calculate_workdays_for_users_per_day(structured_entries):
                     24 - start_of_the_day - gap + end_of_the_day,
                     1,
                 )
-            calculated_workdays_for_each_employee[day][employee] = str(workday) + " h"
-    return calculated_workdays_for_each_employee
+            workdays_for_each_employee[day][employee] = str(workday) + " h"
+    return workdays_for_each_employee
 
 
 def calculate_effective_times(structured_entries):
@@ -194,7 +229,7 @@ def calculate_gaps_in_the_workday_bigger_than_30mins(entries_list_per_pers_day):
     """takes a entries_list_per_pers_day of entries an employee submitted in a day and returns
     the sum of the breaks which are higher than 30 mins. If there are no such breaks,
     then it returns 0"""
-    final_calculated_gap = 0.0
+    final_gap = 0.0
     for i in range(len(entries_list_per_pers_day) - 1):
         between_entries_gap_start = convert_time_string_to_float(
             entries_list_per_pers_day[i][1]
@@ -203,13 +238,13 @@ def calculate_gaps_in_the_workday_bigger_than_30mins(entries_list_per_pers_day):
             entries_list_per_pers_day[i + 1][0]
         )
         if between_entries_gap_end - between_entries_gap_start > 0.5:
-            final_calculated_gap = final_calculated_gap + (
+            final_gap = final_gap + (
                 between_entries_gap_end - between_entries_gap_start
             )
-    if final_calculated_gap > 0.5:
-        return final_calculated_gap - 0.5
+    if final_gap > 0.5:
+        return final_gap - 0.5
     else:
-        return final_calculated_gap
+        return final_gap
 
 
 def calculate_efficiency_percentage_per_user_per_day(effective_times, workdays):
