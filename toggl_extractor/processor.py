@@ -7,8 +7,7 @@ YESTERDAY = date.today() - timedelta(1)
 def get_workdays_for_users_per_day(range):
     structured_entries = get_time_entries_from_toggle_and_structure_them(range)
     workdays = calculate_workdays_for_users_per_day(structured_entries)
-    message = convert_dict_of_dicts_to_string(workdays)
-    return message
+    return convert_dict_of_dicts_to_string(workdays)
 
 
 def get_efficiency_percentage_per_user_per_day(range, return_dict=False):
@@ -21,8 +20,7 @@ def get_efficiency_percentage_per_user_per_day(range, return_dict=False):
     if return_dict:
         return efficiency_per_user_per_day
     else:
-        message = convert_dict_of_dicts_to_string(efficiency_per_user_per_day)
-        return message
+        return convert_dict_of_dicts_to_string(efficiency_per_user_per_day)
 
 
 def get_average_efficiency_per_user_in_range(range):
@@ -32,35 +30,39 @@ def get_average_efficiency_per_user_in_range(range):
     average_efficiency_per_user_in_range = (
         calculate_average_efficiency_per_user_in_range(efficiency_per_user_per_day)
     )
-    message = convert_dict_of_dicts_to_string(average_efficiency_per_user_in_range)
-    return message
+    return convert_dict_of_dicts_to_string(average_efficiency_per_user_in_range)
 
 
 def get_efficiency_of_set_user_per_day(range, set_user):
     efficiency_per_user_per_day = get_efficiency_percentage_per_user_per_day(
         range, return_dict=True
     )
-    efficiency_of_set_user_per_day = calculate_efficiency_of_set_user_per_day(
-        efficiency_per_user_per_day, set_user
-    )
-    print(efficiency_of_set_user_per_day)
-    message = convert_dict_of_dicts_to_string(efficiency_of_set_user_per_day)
-    return message
+    if check_if_user_in_entries(efficiency_per_user_per_day, set_user):
+        efficiency_of_set_user_per_day = calculate_efficiency_of_set_user_per_day(
+            efficiency_per_user_per_day, set_user
+        )
+        return convert_dict_of_dicts_to_string(efficiency_of_set_user_per_day)
+    else:
+        return no_entry_by_that_name(set_user)
 
 
 def get_average_efficiency_of_set_user_in_range(range, set_user):
     efficiency_per_user_per_day = get_efficiency_percentage_per_user_per_day(
         range, return_dict=True
     )
-    efficiency_of_set_user_per_day = calculate_efficiency_of_set_user_per_day(
-        efficiency_per_user_per_day, set_user
-    )
-    efficiency_of_set_user_in_range = calculate_average_efficiency_of_set_user_in_range(
-        efficiency_of_set_user_per_day, set_user
-    )
+    if check_if_user_in_entries(efficiency_per_user_per_day, set_user):
+        efficiency_of_set_user_per_day = calculate_efficiency_of_set_user_per_day(
+            efficiency_per_user_per_day, set_user
+        )
+        efficiency_of_set_user_in_range = (
+            calculate_average_efficiency_of_set_user_in_range(
+                efficiency_of_set_user_per_day, set_user
+            )
+        )
 
-    message = convert_dict_of_dicts_to_string(efficiency_of_set_user_in_range)
-    return message
+        return convert_dict_of_dicts_to_string(efficiency_of_set_user_in_range)
+    else:
+        return no_entry_by_that_name(set_user)
 
 
 def calculate_average_efficiency_of_set_user_in_range(
@@ -92,7 +94,6 @@ def calculate_efficiency_of_set_user_per_day(efficiency_per_user_per_day, set_pe
     extracted_efficiency_of_set_user_per_day = {}
     the_one_and_only_key = str(f"The daily efficiencies of {set_person} are")
     extracted_efficiency_of_set_user_per_day[the_one_and_only_key] = {}
-    set_person_exists = False
     for date in efficiency_per_user_per_day:
         for user in efficiency_per_user_per_day[date]:
             first_name = extract_first_name(user)
@@ -100,16 +101,7 @@ def calculate_efficiency_of_set_user_per_day(efficiency_per_user_per_day, set_pe
                 extracted_efficiency_of_set_user_per_day[the_one_and_only_key][
                     date
                 ] = efficiency_per_user_per_day[date][user]
-                set_person_exists = True
-    if not set_person_exists:
-        no_entries_for_set_user = {
-            f"There are no entries for {set_person}, please": (
-                "\n Verify the name is spelled right\n or extend the range to check more days.\n If there are still no entries, please consider the fact that that person didn't register any work in toggl, or there is no person with that name registred "
-            )
-        }
-        extracted_efficiency_of_set_user_per_day[
-            the_one_and_only_key
-        ] = no_entries_for_set_user
+
     return extracted_efficiency_of_set_user_per_day
 
 
@@ -324,11 +316,17 @@ def convert_string_percentage_to_int(string_percetange):
 
 
 def extract_last_key_in_dict(dict):
-    return list(dict.keys())[len(dict) - 1]
+    if len(dict) > 0:
+        return list(dict.keys())[len(dict) - 1]
+    else:
+        return extract_first_key_in_dict(dict)
 
 
 def extract_first_key_in_dict(dict):
-    return list(dict.keys())[0]
+    if len(dict) > 0:
+        return list(dict.keys())[0]
+    else:
+        return ""
 
 
 def extract_first_name(full_name):
@@ -346,3 +344,15 @@ def get_time_entries_from_toggle_and_structure_them(range):
     raw_time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
     structured_entries = structure_raw_entries_by_day_and_user(raw_time_entries)
     return structured_entries
+
+
+def no_entry_by_that_name(set_user):
+    return f"There is no entry for {set_user}, please check spelling, or increase the range."
+
+
+def check_if_user_in_entries(efficiencies_of_user_per_day, set_person):
+    for date in efficiencies_of_user_per_day:
+        for person in efficiencies_of_user_per_day[date]:
+            if set_person == person or extract_first_name(set_person) == person:
+                return True
+    return False
