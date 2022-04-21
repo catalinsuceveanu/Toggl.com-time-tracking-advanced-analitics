@@ -251,6 +251,9 @@ def calculate_efficiency_percentage_per_user_per_day(effective_times, workdays):
             effective_time_string = effective_times[day][person]
             workday_string = workdays[day][person]
             expected_time_plus_break = float(effective_time_string[0:4]) * 116
+            """116 is the factor because 10 minutes of break for every 50 minutes of work are expected
+            from each employee, so if the effective worked time from toggl is 5 hours and we add 16%,
+            that should be total work time of the effective time + the break"""
             efficiency_percentage = expected_time_plus_break / float(
                 workday_string[0:4]
             )
