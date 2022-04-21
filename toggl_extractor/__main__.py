@@ -16,8 +16,8 @@ def cli():
     help="the number of past days you want to check, starting from yesterday",
 )
 @click.option("--slack", is_flag=True)
-def workdays(range, slack):
-    result = processor.get_workdays_for_users_per_day(range)
+def workdays(r, slack):
+    result = processor.get_workdays_for_users_per_day(r)
     if slack:
         try:
             slack_client.post_to_slack(result)
@@ -37,16 +37,16 @@ def workdays(range, slack):
 @click.option("--slack", is_flag=True)
 @click.option("--useraverage", is_flag=True)
 @click.option("--user", help="who is the user for which you want to see the report")
-def efficiency(range, slack, useraverage, user):
+def efficiency(r, slack, useraverage, user):
     result = str()
     if not useraverage and not user:
-        result = processor.get_efficiency_percentage_per_user_per_day(range)
+        result = processor.get_efficiency_percentage_per_user_per_day(r)
     if useraverage and not user:
-        result = processor.get_average_efficiency_per_user_in_range(range)
+        result = processor.get_average_efficiency_per_user_in_range(r)
     if not useraverage and user:
-        result = processor.get_efficiency_of_set_user_per_day(range, user)
+        result = processor.get_efficiency_of_set_user_per_day(r, user)
     if user and useraverage:
-        result = processor.get_efficiency_of_set_user_in_range(range, user)
+        result = processor.get_average_efficiency_of_set_user_in_range(r, user)
     if slack:
         try:
             slack_client.post_to_slack(result)

@@ -5,29 +5,29 @@ YESTERDAY = date.today() - timedelta(1)
 
 
 def get_workdays_for_users_per_day(range):
-    structured_entries = execute_common_sequance(range)
+    structured_entries = get_time_entries_from_toggle_and_structure_them(range)
     workdays = calculate_workdays_for_users_per_day(structured_entries)
     message = convert_dict_of_dicts_to_string(workdays)
     return message
 
 
-def get_efficiency_percentage_per_user_per_day(range):
-    structured_entries = execute_common_sequance(range)
+def get_efficiency_percentage_per_user_per_day(range, return_dict=False):
+    structured_entries = get_time_entries_from_toggle_and_structure_them(range)
     workdays = calculate_workdays_for_users_per_day(structured_entries)
     effective_times = calculate_effective_times(structured_entries)
     efficiency_per_user_per_day = calculate_efficiency_percentage_per_user_per_day(
         effective_times, workdays
     )
-    message = convert_dict_of_dicts_to_string(efficiency_per_user_per_day)
-    return message
+    if return_dict:
+        return efficiency_per_user_per_day
+    else:
+        message = convert_dict_of_dicts_to_string(efficiency_per_user_per_day)
+        return message
 
 
 def get_average_efficiency_per_user_in_range(range):
-    structured_entries = execute_common_sequance(range)
-    effective_times = calculate_effective_times(structured_entries)
-    workdays = calculate_workdays_for_users_per_day(structured_entries)
-    efficiency_per_user_per_day = calculate_efficiency_percentage_per_user_per_day(
-        effective_times, workdays
+    efficiency_per_user_per_day = get_efficiency_percentage_per_user_per_day(
+        range, return_dict=True
     )
     average_efficiency_per_user_in_range = (
         calculate_average_efficiency_per_user_in_range(efficiency_per_user_per_day)
@@ -37,11 +37,8 @@ def get_average_efficiency_per_user_in_range(range):
 
 
 def get_efficiency_of_set_user_per_day(range, set_user):
-    structured_entries = execute_common_sequance(range)
-    effective_times = calculate_effective_times(structured_entries)
-    workdays = calculate_workdays_for_users_per_day(structured_entries)
-    efficiency_per_user_per_day = calculate_efficiency_percentage_per_user_per_day(
-        effective_times, workdays
+    efficiency_per_user_per_day = get_efficiency_percentage_per_user_per_day(
+        range, return_dict=True
     )
     efficiency_of_set_user_per_day = calculate_efficiency_of_set_user_per_day(
         efficiency_per_user_per_day, set_user
@@ -51,12 +48,9 @@ def get_efficiency_of_set_user_per_day(range, set_user):
     return message
 
 
-def get_efficiency_of_set_user_in_range(range, set_user):
-    structured_entries = execute_common_sequance(range)
-    effective_times = calculate_effective_times(structured_entries)
-    workdays = calculate_workdays_for_users_per_day(structured_entries)
-    efficiency_per_user_per_day = calculate_efficiency_percentage_per_user_per_day(
-        effective_times, workdays
+def get_average_efficiency_of_set_user_in_range(range, set_user):
+    efficiency_per_user_per_day = get_efficiency_percentage_per_user_per_day(
+        range, return_dict=True
     )
     efficiency_of_set_user_per_day = calculate_efficiency_of_set_user_per_day(
         efficiency_per_user_per_day, set_user
@@ -344,7 +338,7 @@ def extract_first_name(full_name):
     return first_name
 
 
-def execute_common_sequance(range):
+def get_time_entries_from_toggle_and_structure_them(range):
     start_date = calculate_start_date_from_range(range)
     raw_time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
     structured_entries = structure_raw_entries_by_day_and_user(raw_time_entries)
