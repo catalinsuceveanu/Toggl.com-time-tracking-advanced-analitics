@@ -197,13 +197,13 @@ def calculate_effective_times(structured_entries):
                     "0" + str(round(effective_time_worked, 2)) + " h"
                 )
 
-                """this will add a zero in front of a number to transform 4.1 in 04.1"""
+                # this will add a zero in front of a number to transform 4.1 in 04.1
             else:
                 effective_worked_times_per_user_per_day[day][person] = (
                     str(round(effective_time_worked, 2)) + " h"
                 )
 
-                """this will NOT add a zero in front of a number beacuse it already has both units and tens eg. 12.4"""
+                # this will NOT add a zero in front of a number beacuse it already has both units and tens eg. 12.4
     return effective_worked_times_per_user_per_day
 
 

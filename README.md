@@ -1,7 +1,7 @@
 # Vipra Data Unity #
 
 
-## Feature: Show full work day for everyone for the speficific time range in days ##
+## Feature: Show full work day for everyone for the specific time range in days ##
 
 This is defined as the sum of all the time entries + gaps between entries, which are smaller than 30 minutes (as 30 minutes or less is considered to be a resonable break in work and still counts as part of your workday)
 
