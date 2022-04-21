@@ -30,7 +30,6 @@ def workdays(range, slack):
 
 @click.command()
 @click.option(
-    "--range",
     "--r",
     default=2,
     help="the number of past days you want to check, starting from yesterday",
