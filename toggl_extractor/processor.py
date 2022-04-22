@@ -68,17 +68,16 @@ def get_average_efficiency_of_set_user_in_range(range, set_user):
 def calculate_average_efficiency_of_set_user_in_range(
     daily_efficiencies_of_person, set_person
 ):
-    """given a certain range of days, this method receives the calculated efficiencies of the person of interest
-    in a dictionary of dictionaries, and the person of interest as a string. Here the efficiencies are averaged, then inserted
-    into the same format of dictionary of dictionaries (to be able to use the same method of printing in the end).
-    This is the format from which all the methods finally convert the data into text."""
     list_of_efficiency_percentages = []
-    """this is a list of the percentages to be averaged"""
+    # this is a list of the percentages to be averaged
     the_average_efficiency_key = f"The average efficiency of {set_person} between"
+    # this key will be used to form common the data structure {key:{date:percent}}
     for initial_key in daily_efficiencies_of_person:
-        start_date = extract_last_key_in_dict(daily_efficiencies_of_person[initial_key])
-        end_date = extract_first_key_in_dict(daily_efficiencies_of_person[initial_key])
+        start_date = extract_first_date(daily_efficiencies_of_person[initial_key])
+        end_date = extract_last_date(daily_efficiencies_of_person[initial_key])
         between_dates = f"{start_date} and {end_date} is"
+        # the 3 lines above form the "date" key which tells the start and end dates
+
         for date in daily_efficiencies_of_person[initial_key]:
             list_of_efficiency_percentages.append(
                 daily_efficiencies_of_person[initial_key][date]
@@ -114,8 +113,8 @@ def calculate_efficiency_of_set_user_per_day(efficiency_per_user_per_day, set_pe
 def calculate_average_efficiency_per_user_in_range(
     efficiency_per_user_per_day,
 ):
-    first_date = extract_last_key_in_dict(efficiency_per_user_per_day)
-    last_date = extract_first_key_in_dict(efficiency_per_user_per_day)
+    first_date = extract_first_date(efficiency_per_user_per_day)
+    last_date = extract_last_date(efficiency_per_user_per_day)
     the_one_and_only_key = str(
         f"The efficiencies of all the users between {first_date} and {last_date} are"
     )
@@ -316,14 +315,14 @@ def convert_string_percentage_to_int(string_percetange):
     return int(string_percetange[0:-2])
 
 
-def extract_last_key_in_dict(dict):
+def extract_first_date(dict):
     if len(dict) > 0:
         return list(dict.keys())[len(dict) - 1]
     else:
-        return extract_first_key_in_dict(dict)
+        return extract_last_date(dict)
 
 
-def extract_first_key_in_dict(dict):
+def extract_last_date(dict):
     if len(dict) > 0:
         return list(dict.keys())[0]
     else:
