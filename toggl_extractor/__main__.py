@@ -39,20 +39,20 @@ def workdays(r, slack):
 @click.option("--user", help="who is the user for which you want to see the report")
 def efficiency(r, slack, useraverage, user):
     result = str()
-    if not useraverage and not user:
-        result = processor.get_efficiency_percentage_per_user_per_day(r)
-    if useraverage and not user:
-        result = processor.get_average_efficiency_per_user_in_range(r)
-    if not useraverage and user:
-        result = processor.get_efficiency_of_set_user_per_day(r, user)
-    if user and useraverage:
-        result = processor.get_average_efficiency_of_set_user_in_range(r, user)
+    if user:
+        if useraverage:
+            result = processor.get_average_efficiency_of_set_user_in_range(r, user)
+        else:
+            result = processor.get_efficiency_of_set_user_per_day(r, user)
+    else:
+        if useraverage:
+            result = processor.get_average_efficiency_per_user_in_range(r)
+        else:
+            result = processor.get_efficiency_percentage_per_user_per_day(r)
+
     if slack:
-        try:
-            slack_client.post_to_slack(result)
-            print("The output for the required days was posted on slack")
-        except:
-            print(slack_client.post_to_slack(result))
+        slack_client.post_to_slack(result)
+        print("The output for the required days was posted on slack")
     else:
         print(result)
 
