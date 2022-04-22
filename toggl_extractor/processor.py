@@ -43,7 +43,7 @@ def get_efficiency_of_set_user_per_day(range, set_user):
         )
         return convert_dict_of_dicts_to_string(efficiency_of_set_user_per_day)
     else:
-        return no_entry_by_that_name(set_user)
+        return f"There is no entry for {set_user}, please check spelling, or increase the range."
 
 
 def get_average_efficiency_of_set_user_in_range(range, set_user):
@@ -62,32 +62,38 @@ def get_average_efficiency_of_set_user_in_range(range, set_user):
 
         return convert_dict_of_dicts_to_string(efficiency_of_set_user_in_range)
     else:
-        return no_entry_by_that_name(set_user)
+        return f"There is no entry for {set_user}, please check spelling, or increase the range."
 
 
 def calculate_average_efficiency_of_set_user_in_range(
     daily_efficiencies_of_person, set_person
 ):
+    """given a certain range of days, this method receives the calculated efficiencies of the person of interest
+    in a dictionary of dictionaries, and the person of interest as a string. Here the efficiencies are averaged, then inserted
+    into the same format of dictionary of dictionaries (to be able to use the same method of printing in the end).
+    This is the format from which all the methods finally convert the data into text."""
     list_of_efficiency_percentages = []
-    the_one_and_only_key = f"The average efficiency of {set_person} between"
-    start_date = ""
-    end_date = ""
-    dates = ""
-    result = {the_one_and_only_key: {}}
-    for key in daily_efficiencies_of_person:
-        start_date = extract_last_key_in_dict(daily_efficiencies_of_person[key])
-        end_date = extract_first_key_in_dict(daily_efficiencies_of_person[key])
-        dates = f"{start_date} and {end_date} is"
-        for date in daily_efficiencies_of_person[key]:
+    """this is a list of the percentages to be averaged"""
+    the_average_efficiency_key = f"The average efficiency of {set_person} between"
+    for initial_key in daily_efficiencies_of_person:
+        start_date = extract_last_key_in_dict(daily_efficiencies_of_person[initial_key])
+        end_date = extract_first_key_in_dict(daily_efficiencies_of_person[initial_key])
+        between_dates = f"{start_date} and {end_date} is"
+        for date in daily_efficiencies_of_person[initial_key]:
             list_of_efficiency_percentages.append(
-                daily_efficiencies_of_person[key][date]
+                daily_efficiencies_of_person[initial_key][date]
             )
-    average_efficiency_of_the_set_person = (
-        calculate_average_of_string_percentages_in_list(list_of_efficiency_percentages)
-    )
+        average_efficiency_of_the_set_person = (
+            calculate_average_of_string_percentages_in_list(
+                list_of_efficiency_percentages
+            )
+        )
 
-    result[the_one_and_only_key] = {dates: average_efficiency_of_the_set_person}
-    return result
+        return {
+            the_average_efficiency_key: {
+                between_dates: average_efficiency_of_the_set_person
+            }
+        }
 
 
 def calculate_efficiency_of_set_user_per_day(efficiency_per_user_per_day, set_person):
@@ -196,9 +202,12 @@ def calculate_effective_times(structured_entries):
 def structure_raw_entries_by_day_and_user(entries):
     structured_data = {}
     for working_entry in entries:
-        start_time = extract_time_from_string(working_entry["start"])
-        end_time = extract_time_from_string(working_entry["end"])
-        date = extract_date_from_string(working_entry["start"])
+        start_time = working_entry["start"][11:16]
+        # start_time equals the substring of the carachters between 11 and 15 of the string
+        end_time = working_entry["end"][11:16]
+        # end_time equals the substring of the carachters between 11 and 15 of the string
+        date = working_entry["start"][0:10]
+        # date equals the substring of the carachters between 0 and 9 of the string
         working_time = [start_time, end_time]
         user = working_entry["user"]
 
@@ -277,14 +286,6 @@ def convert_dict_of_dicts_to_string(result):
     return converted_dict_of_dicts_to_string
 
 
-def extract_date_from_string(iso_date_time):
-    return iso_date_time[0:10]
-
-
-def extract_time_from_string(iso_date_time):
-    return iso_date_time[11:16]
-
-
 def calculate_start_date_from_range(range):
     """
     takes the time range (number of days) and returns 2 dates start date (present day-time range = start date)
@@ -344,10 +345,6 @@ def get_time_entries_from_toggle_and_structure_them(range):
     raw_time_entries = toggl_client.get_time_entries(start_date, YESTERDAY)
     structured_entries = structure_raw_entries_by_day_and_user(raw_time_entries)
     return structured_entries
-
-
-def no_entry_by_that_name(set_user):
-    return f"There is no entry for {set_user}, please check spelling, or increase the range."
 
 
 def check_if_user_in_entries(efficiencies_of_user_per_day, set_person):
