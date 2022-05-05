@@ -69,27 +69,41 @@ def calculate_avrg_efficiency_of_set_user_in_range(
     daily_efficiencies_of_user, set_user
 ):
     list_of_efficiency_percents = []
-    # this is a list of the percentages to be avrgd
+    # this is a list of the percentages to be avreged
+
     the_avrg_efficiency_key = f"The avrg efficiency of {set_user} between"
-    # this key will be used to form common the data structure {key:{date:percent}}
+    # this key will be used to form the common data structure {key:{date:percent}}
+
     for init_key in daily_efficiencies_of_user:
         start_date = extract_first_date(daily_efficiencies_of_user[init_key])
         end_date = extract_last_date(daily_efficiencies_of_user[init_key])
         between_dates = f"{start_date} and {end_date} is"
-        # the 3 lines above form the "date" key which tells the start and end dates
+        """ 
+        the 3 lines above form the "date" key which tells the start and end dates, later when printing. egg:
+                The avrg efficiency of Laurie between:    <- this is the_avrg_efficiency_key
+                2022-04-25 and 2022-05-04 is: 105 %       <- these are the between_dates key and its value
+
+                the value is yet to be calculated
+        """
 
         for day in daily_efficiencies_of_user[init_key]:
             list_of_efficiency_percents.append(
                 daily_efficiencies_of_user[init_key][day]
             )
             # here a list of percentages is populated
+
         avrg_efficiency_of_the_set_user = calculate_avrg_of_string_percentages_in_list(
             list_of_efficiency_percents
         )
+        # this is where the value of from the above egg is calculated
 
         return {
             the_avrg_efficiency_key: {between_dates: avrg_efficiency_of_the_set_user}
         }
+        """
+        this is the final data structure formed, for the above egg it would now look like:
+            {"The avrg efficiency of Laurie between":{"2022-04-25 and 2022-05-04 is": "105 %"}}
+        """
 
 
 def calculate_efficiency_of_set_user_per_day(efficiency_per_user_per_day, set_user):
