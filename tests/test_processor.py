@@ -86,19 +86,19 @@ class testProcessor(unittest.TestCase):
             output,
         )
 
-    def test_convert_dict_of_dicts_to_string(self):
+    def test_convert_data_to_string_structure(self):
         with open(
-            "tests/data/convert_dict_of_dicts_to_string_input.json"
+            "tests/data/convert_data_to_string_structure_input.json"
         ) as input_file:
             input = eval(input_file.read())
 
         with open(
-            "tests/data/convert_dict_of_dicts_to_string_output.json"
+            "tests/data/convert_data_to_string_structure_output.json"
         ) as output_file:
             output = eval(output_file.read())
 
         self.assertEqual(
-            processor.convert_dict_of_dicts_to_string(input),
+            processor.convert_data_to_string_structure(input),
             output,
         )
 

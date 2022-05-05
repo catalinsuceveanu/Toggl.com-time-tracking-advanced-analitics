@@ -7,7 +7,7 @@ YESTERDAY = date.today() - timedelta(1)
 def get_workdays_for_users_per_day(range):
     structured_entries = get_time_entries_from_toggle_and_structure_them(range)
     workdays = calculate_workdays_for_users_per_day(structured_entries)
-    return convert_dict_of_dicts_to_string(workdays)
+    return convert_data_to_string_structure(workdays)
 
 
 def get_efficiency_percentage_per_user_per_day(range, return_dict=False):
@@ -20,7 +20,7 @@ def get_efficiency_percentage_per_user_per_day(range, return_dict=False):
     if return_dict:
         return efficiency_per_user_per_day
     else:
-        return convert_dict_of_dicts_to_string(efficiency_per_user_per_day)
+        return convert_data_to_string_structure(efficiency_per_user_per_day)
 
 
 def get_avrg_efficiency_per_user_in_range(range):
@@ -30,7 +30,7 @@ def get_avrg_efficiency_per_user_in_range(range):
     avrg_efficiency_per_user_in_range = calculate_avrg_efficiency_per_user_in_range(
         efficiency_per_user_per_day
     )
-    return convert_dict_of_dicts_to_string(avrg_efficiency_per_user_in_range)
+    return convert_data_to_string_structure(avrg_efficiency_per_user_in_range)
 
 
 def get_efficiency_of_set_user_per_day(range, set_user):
@@ -41,7 +41,7 @@ def get_efficiency_of_set_user_per_day(range, set_user):
         efficiency_of_set_user_per_day = calculate_efficiency_of_set_user_per_day(
             efficiency_per_user_per_day, set_user
         )
-        return convert_dict_of_dicts_to_string(efficiency_of_set_user_per_day)
+        return convert_data_to_string_structure(efficiency_of_set_user_per_day)
     else:
         return f"There is no entry for {set_user}, please check spelling, or increase the range."
 
@@ -60,7 +60,7 @@ def get_avrg_efficiency_of_set_user_in_range(range, set_user):
             )
         )
 
-        return convert_dict_of_dicts_to_string(efficiency_of_set_user_in_range)
+        return convert_data_to_string_structure(efficiency_of_set_user_in_range)
     else:
         return f"There is no entry for {set_user}, please check spelling, or increase the range."
 
@@ -265,20 +265,14 @@ def calculate_efficiency_percentage_per_user_per_day(effective_times, workdays):
     return efficiency_per_user_per_day
 
 
-def convert_dict_of_dicts_to_string(result):
-    converted_dict_of_dicts_to_string = str()
+def convert_data_to_string_structure(result):
+    output_string = str()
     for day in result:
-        converted_dict_of_dicts_to_string = converted_dict_of_dicts_to_string + str(
-            day + ":" + "\n"
-        )
+        output_string = output_string + str(day + ":" + "\n")
         for user in result[day]:
-            converted_dict_of_dicts_to_string = converted_dict_of_dicts_to_string + str(
-                user + ": " + result[day][user] + "\n"
-            )
-        converted_dict_of_dicts_to_string = converted_dict_of_dicts_to_string + str(
-            "\n\n"
-        )
-    return converted_dict_of_dicts_to_string
+            output_string = output_string + str(user + ": " + result[day][user] + "\n")
+        output_string = output_string + str("\n\n")
+    return output_string
 
 
 def calculate_start_date_from_range(range):
