@@ -22,11 +22,7 @@ def workdays(range, slack):
     if toggl_client.check_toggl_api_settings():
         result = processor.get_workdays_for_users_per_day(range)
         if slack:
-            try:
-                slack_client.post_to_slack(result)
-                print("The output for the required days was posted on slack")
-            except:
-                print(slack_client.post_to_slack(result))
+            slack_client.post_to_slack(result)
         else:
             print(result)
 
@@ -57,7 +53,6 @@ def efficiency(range, slack, useraverage, user):
 
         if slack:
             slack_client.post_to_slack(result)
-            print("The output for the required days was posted on slack")
         else:
             print(result)
 
