@@ -186,7 +186,7 @@ class testProcessor(unittest.TestCase):
         self.assertEqual(processor.extract_first_name(full_name_2), first_name_2)
         self.assertEqual(processor.extract_first_name(full_name_3), first_name_3)
 
-    def test_calculate_average_efficiency_per_user_in_range(self):
+    def test_calculate_avrg_efficiency_per_user_in_range(self):
         self.maxDiff = None
         with open(
             "tests/data/calculate_average_efficiency_per_user_in_range_input.json"
@@ -198,7 +198,7 @@ class testProcessor(unittest.TestCase):
             output = eval(output_file.read())
 
         self.assertEqual(
-            processor.calculate_average_efficiency_per_user_in_range(input), output
+            processor.calculate_avrg_efficiency_per_user_in_range(input), output
         )
 
     def test_calculate_average_of_string_percentages_in_list(self):
@@ -210,13 +210,13 @@ class testProcessor(unittest.TestCase):
         output_3 = "1 %"
 
         self.assertEqual(
-            processor.calculate_average_of_string_percentages_in_list(case_1), output_1
+            processor.calculate_avrg_of_string_percentages_in_list(case_1), output_1
         )
         self.assertEqual(
-            processor.calculate_average_of_string_percentages_in_list(case_2), output_2
+            processor.calculate_avrg_of_string_percentages_in_list(case_2), output_2
         )
         self.assertEqual(
-            processor.calculate_average_of_string_percentages_in_list(case_3), output_3
+            processor.calculate_avrg_of_string_percentages_in_list(case_3), output_3
         )
 
     def test_convert_string_percentage_to_int(self):
@@ -243,7 +243,7 @@ class testProcessor(unittest.TestCase):
         self.assertEqual(processor.extract_first_name(case_2), output_2)
         self.assertEqual(processor.extract_first_name(case_3), output_3)
 
-    def test_calculate_average_efficiency_of_set_user_in_range(self):
+    def test_calculate_avrg_efficiency_of_set_user_in_range(self):
         set_person = "Matei"
         with open(
             "tests/data/calculate_efficiency_of_set_user_in_range_input_1.json"
@@ -255,9 +255,7 @@ class testProcessor(unittest.TestCase):
             output = eval(output_file.read())
 
         self.assertEqual(
-            processor.calculate_average_efficiency_of_set_user_in_range(
-                input, set_person
-            ),
+            processor.calculate_avrg_efficiency_of_set_user_in_range(input, set_person),
             output,
         )
 
