@@ -3,7 +3,7 @@
 
 ## Feature: Show full work day for everyone for the specific time range in days ##
 
-This is defined as the sum of all the time entries + gaps between entries, which are smaller than 30 minutes (as 30 minutes or less is considered to be a resonable break in work and still counts as part of your workday)
+This is defined as the sum of all the time entries + gaps between entries, which are smaller than 30 minutes (as 30 minutes or less is considered to be a reasonable break in work and still counts as part of your workday)
 
 When breaks higher than 30 minutes are found, they are added. Out of the entire sum 30 minutes are subtracted and the reminder is removed out of the persons entire workday.
 
@@ -15,10 +15,10 @@ poetry run python -m toggl_extractor workdays --r 1
 
 - **--r**: is the option for past days for which you want to see the report
 
-- **"1" / int** : the no. of days for the report (starting the day before), so if you give it a 1, it will give you the report for yesterday, if you give it a 2, it will return the report for yesterday and the day before, 3, yesterday, the day before yesterday and the day before the day berfore yesterday. It will return data for those date only if there are entries for those dates. Example Sundays usually don't have entries, but they count in the number of days, even if there is nothing to dispaly.
+- **"1" / int** : the no. of days for the report (starting the day before), so if you give it a 1, it will give you the report for yesterday, if you give it a 2, it will return the report for yesterday and the day before, 3, yesterday, the day before yesterday and the day before the day before yesterday. It will return data for those date only if there are entries for those dates. Example Sundays usually don't have entries, but they count in the number of days, even if there is nothing to dispaly.
 
 
-exemple output
+example output
 (cmd given on 2022-03-18, observe how the report is from one day before the command was given):
 ```python
 poetry run python -m toggl_extractor workdays --r 1
