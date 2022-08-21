@@ -20,6 +20,3 @@ def post_to_slack(message):
             )
     except:
         print(settings.SLACK_API_ERROR)
-
-
-# def check_slack_api_settings():
