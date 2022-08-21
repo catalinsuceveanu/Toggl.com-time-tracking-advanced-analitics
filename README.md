@@ -1,4 +1,4 @@
-# Vipra Data Unity #
+# Toggl.com time tracking advanced analitics #
 
 
 ## Feature: Show full work day for everyone for the specific time range in days ##
