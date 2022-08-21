@@ -42,17 +42,14 @@ def efficiency(range, slack, useraverage, user):
         result = str()
         if user:
             if useraverage:
-                result = processor.get_avrg_efficiency_of_set_user_in_range(
-                    range, user)
+                result = processor.get_avrg_efficiency_of_set_user_in_range(range, user)
             else:
-                result = processor.get_efficiency_of_set_user_per_day(
-                    range, user)
+                result = processor.get_efficiency_of_set_user_per_day(range, user)
         else:
             if useraverage:
                 result = processor.get_avrg_efficiency_per_user_in_range(range)
             else:
-                result = processor.get_efficiency_percentage_per_user_per_day(
-                    range)
+                result = processor.get_efficiency_percentage_per_user_per_day(range)
 
         if slack:
             slack_client.post_to_slack(result)

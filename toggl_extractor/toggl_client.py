@@ -54,6 +54,3 @@ def check_toggl_api_settings():
     except:
         print(settings.TOGGL_API_ERROR)
         return False
-
-
-print(check_toggl_api_settings())
